@@ -1,0 +1,44 @@
+{
+  "name": "thatskybotid",
+  "version": "1.5.0",
+  "description": "thatskygameid moderation bot",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "thatskygame",
+    "thatskygameid",
+    "sky",
+    "thatgamecompany",
+    "game",
+    "moderation",
+    "bot"
+  ],
+  "author": "Huntress of the Fallen",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/translate": "^8.0.1",
+    "decache": "^4.6.2",
+    "discord-hybrid-sharding": "^2.1.3",
+    "discord.js": "^14.13.0",
+    "discord.js-rate-limiter": "^1.3.2",
+    "dotenv": "^16.3.1",
+    "fs": "^0.0.1-security",
+    "googleapis": "^126.0.1",
+    "languagedetect": "^2.0.0",
+    "mongoose": "^7.5.0",
+    "openai": "^4.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.48.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huntressofthefallen/thatskybotid.git"
+  },
+  "bugs": {
+    "url": "https://github.com/huntressofthefallen/thatskybotid/issues"
+  },
+  "homepage": "https://github.com/huntressofthefallen/thatskybotid#readme"
+}
