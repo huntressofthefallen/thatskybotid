@@ -27,11 +27,11 @@ const client = new Client({
 	makeCache: Options.cacheEverything(),
 });
 client.cluster = new ClusterClient(client);
-const { Configuration, OpenAIApi } = require('openai');
-const configuration = new Configuration({
-	apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+// const { Configuration, OpenAIApi } = require('openai');
+// const configuration = new Configuration({
+// 	apiKey: process.env.OPENAI_API_KEY,
+// });
+// const openai = new OpenAIApi(configuration);
 
 const skiproleid = ['1009673144744816670', '1009732058555367475', '1009733483825995846'];
 
@@ -90,48 +90,48 @@ client.on(Events.MessageCreate, async (message) => {
 				return;
 			}
 			else {
-				if (message.content && message.content?.length > 0) {
-					try {
-						const moderationResponse = await openai.createModeration({
-							input: message.content,
-						});
-						if (moderationResponse.data.results[0].flagged) {
-							await client.channels.fetch('1116179227037929532').then(async (testChannel) => {
-								const categoriesResult = moderationResponse.data.results[0].categories;
-								const scoresResult = moderationResponse.data.results[0].category_scores;
+				// if (message.content && message.content?.length > 0) {
+				// 	try {
+				// 		const moderationResponse = await openai.createModeration({
+				// 			input: message.content,
+				// 		});
+				// 		if (moderationResponse.data.results[0].flagged) {
+				// 			await client.channels.fetch('1116179227037929532').then(async (testChannel) => {
+				// 				const categoriesResult = moderationResponse.data.results[0].categories;
+				// 				const scoresResult = moderationResponse.data.results[0].category_scores;
 
-								let categories = '';
-								let scores = '';
+				// 				let categories = '';
+				// 				let scores = '';
 
-								for (const key in categoriesResult) {
-									categories += `- ${key}: \`${categoriesResult[key]}\`\n`;
-								}
+				// 				for (const key in categoriesResult) {
+				// 					categories += `- ${key}: \`${categoriesResult[key]}\`\n`;
+				// 				}
 
-								for (const key in scoresResult) {
-									scores += `- ${key}: \`${scoresResult[key]}\`\n`;
-								}
+				// 				for (const key in scoresResult) {
+				// 					scores += `- ${key}: \`${scoresResult[key]}\`\n`;
+				// 				}
 
-								const moderationEmbed = embedBuilder({
-									client,
-									user: message.author,
-									title: 'AI Moderation Results',
-									description: message.content,
-									fields: [
-										{
-											name: 'Categories', value: categories, inline: false,
-										},
-										{ name: 'Category Scores', value: scores, inline: false },
-										{ name: 'Flagged', value: moderationResponse.data.results[0].flagged ? '🔴 Not Safe' : '🟢 Safe', inline: false },
-									],
-								});
-								await testChannel.send({ content: message.url, embeds: [moderationEmbed] }).catch(console.error);
-							});
-						}
-					}
-					catch (error) {
-						console.error(error.message);
-					}
-				}
+				// 				const moderationEmbed = embedBuilder({
+				// 					client,
+				// 					user: message.author,
+				// 					title: 'AI Moderation Results',
+				// 					description: message.content,
+				// 					fields: [
+				// 						{
+				// 							name: 'Categories', value: categories, inline: false,
+				// 						},
+				// 						{ name: 'Category Scores', value: scores, inline: false },
+				// 						{ name: 'Flagged', value: moderationResponse.data.results[0].flagged ? '🔴 Not Safe' : '🟢 Safe', inline: false },
+				// 					],
+				// 				});
+				// 				await testChannel.send({ content: message.url, embeds: [moderationEmbed] }).catch(console.error);
+				// 			});
+				// 		}
+				// 	}
+				// 	catch (error) {
+				// 		console.error(error.message);
+				// 	}
+				// }
 
 				const spam = spamLimiter.take(message.author.id);
 
@@ -422,48 +422,48 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 				return;
 			}
 			else {
-				if (newMessage.content && newMessage.content?.length > 0) {
-					try {
-						const moderationResponse = await openai.createModeration({
-							input: newMessage.content,
-						});
-						if (moderationResponse.data.results[0].flagged) {
-							await client.channels.fetch('1116179227037929532').then(async (testChannel) => {
-								const categoriesResult = moderationResponse.data.results[0].categories;
-								const scoresResult = moderationResponse.data.results[0].category_scores;
+				// if (newMessage.content && newMessage.content?.length > 0) {
+				// 	try {
+				// 		const moderationResponse = await openai.createModeration({
+				// 			input: newMessage.content,
+				// 		});
+				// 		if (moderationResponse.data.results[0].flagged) {
+				// 			await client.channels.fetch('1116179227037929532').then(async (testChannel) => {
+				// 				const categoriesResult = moderationResponse.data.results[0].categories;
+				// 				const scoresResult = moderationResponse.data.results[0].category_scores;
 
-								let categories = '';
-								let scores = '';
+				// 				let categories = '';
+				// 				let scores = '';
 
-								for (const key in categoriesResult) {
-									categories += `- ${key}: \`${categoriesResult[key]}\`\n`;
-								}
+				// 				for (const key in categoriesResult) {
+				// 					categories += `- ${key}: \`${categoriesResult[key]}\`\n`;
+				// 				}
 
-								for (const key in scoresResult) {
-									scores += `- ${key}: \`${scoresResult[key]}\`\n`;
-								}
+				// 				for (const key in scoresResult) {
+				// 					scores += `- ${key}: \`${scoresResult[key]}\`\n`;
+				// 				}
 
-								const moderationEmbed = embedBuilder({
-									client,
-									user: newMessage.author,
-									title: 'AI Moderation Results',
-									description: newMessage.content,
-									fields: [
-										{
-											name: 'Categories', value: categories, inline: false,
-										},
-										{ name: 'Category Scores', value: scores, inline: false },
-										{ name: 'Flagged', value: moderationResponse.data.results[0].flagged ? '🔴 Not Safe' : '🟢 Safe', inline: false },
-									],
-								});
-								await testChannel.send({ content: newMessage.url, embeds: [moderationEmbed] }).catch(console.error);
-							});
-						}
-					}
-					catch (error) {
-						console.error(error.message);
-					}
-				}
+				// 				const moderationEmbed = embedBuilder({
+				// 					client,
+				// 					user: newMessage.author,
+				// 					title: 'AI Moderation Results',
+				// 					description: newMessage.content,
+				// 					fields: [
+				// 						{
+				// 							name: 'Categories', value: categories, inline: false,
+				// 						},
+				// 						{ name: 'Category Scores', value: scores, inline: false },
+				// 						{ name: 'Flagged', value: moderationResponse.data.results[0].flagged ? '🔴 Not Safe' : '🟢 Safe', inline: false },
+				// 					],
+				// 				});
+				// 				await testChannel.send({ content: newMessage.url, embeds: [moderationEmbed] }).catch(console.error);
+				// 			});
+				// 		}
+				// 	}
+				// 	catch (error) {
+				// 		console.error(error.message);
+				// 	}
+				// }
 
 				const args = newMessage.content.toLowerCase().trim().replace(/4|@/gi, 'a').replace(/\$/gi, 's').replace(/1|!/gi, 'i').replace(/0/gi, 'o').replace(/3/gi, 'e').split(/\s+/gi);
 				const censorship = { count: 0, words: [] };
