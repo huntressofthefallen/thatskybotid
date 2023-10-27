@@ -1,23 +1,38 @@
 const { EmbedBuilder } = require('discord.js');
+const translate = require('./scripts/translate');
 
 module.exports = async (client) => {
-	const embed = new EmbedBuilder()
-		.setTitle('Quick Dev Updates')
-		.setURL('https://discord.com/channels/575762611111592007/1077716001493356574')
-		.setDescription('Selamat datang di Quick Dev Updates! <a:bySqwarlockCyan:635918236801564690> Saluran ini adalah tempat bagi para pengembang untuk memberikan catatan singkat tentang apa yang terjadi dengan pengembangan game Sky, bug, patch, dan banyak lagi.\n<:SkyLook:649013670625542155> Untuk berita utama dan informasi patch, silakan terus ikuti kanal <#1009676335255408760> dan <#1009676463676588103> kami.')
-		.setAuthor({ name: 'Stellify', iconURL: 'https://cdn.discordapp.com/avatars/553784838860177409/af503f07ceb8b8f8ea2f1e50583fba95.webp' })
-		.setFooter({ text: '1077718663324516402' })
-		.setThumbnail('https://img2.storyblok.com/fit-in/0x300/filters:format(webp)/f/108104/368x415/436d2e239c/sky-logo-white.png')
-		.setColor('Random')
-		.setTimestamp();
+	// thatskygame global guild
+	const guild = await client.guilds.fetch('575762611111592007').catch(console.error);
 
-	await client.guilds.fetch('1009644872065613864').then(async (g2) => {
-		await g2.channels.fetch('1077754426573467798').then(async (ch2) => {
-			await ch2.send({ embeds: [embed] }).then(async (mes) => {
-				if (mes.crosspostable) {
-					await mes.crosspost().catch(err => console.error(err));
-				}
-			}).catch(err => console.error(err));
+	// thatskygame global channel of original announcement
+	const channel = await client.channels.fetch('1077716001493356574').catch(console.error);
+
+	// message id of original announcement
+	const message = await channel.messages.fetch('1166433374492184656').catch(console.error);
+
+	// thatskygameid indonesia channel for posting announcement
+	const postChannel = await client.channels.fetch('1077754426573467798').catch(console.error);
+
+	// fetching the author member data from global guild
+	const member = await guild.members.fetch(message.author.id).catch(console.error);
+
+	// Google translate and posting announcements
+	translate(message.content, { to: 'id' }).then(async res => {
+		const embed = new EmbedBuilder()
+			.setTitle('Quick Dev Updates')
+			.setURL(`https://discord.com/channels/575762611111592007/1077716001493356574/${message.id}`)
+			.setDescription(res)
+			.setAuthor({ name: member.displayName, iconURL: member.displayAvatarURL() })
+			.setFooter({ text: message.id })
+			.setThumbnail('https://img2.storyblok.com/fit-in/0x300/filters:format(webp)/f/108104/368x415/436d2e239c/sky-logo-white.png')
+			.setColor('Random')
+			.setTimestamp();
+
+		await postChannel.send({ embeds: [embed] }).then(async (mes) => {
+			if (mes.crosspostable) {
+				await mes.crosspost().catch(err => console.error(err));
+			}
 		}).catch(err => console.error(err));
 	}).catch(err => console.error(err));
 };

@@ -44,14 +44,14 @@ module.exports = async (client) => {
 			num++;
 			setTimeout(async () => {
 				await member.roles.add(childOfLightRole).catch(console.error);
-				console.log(`S${count}. [add] => ${member.user.tag} - ${member.pending} - ${member.roles.cache.has('1009736934765113415')}`);
+				console.log(`S${count}. [add] => ${member.user.tag} - Pending: ${member.pending} - hasRole: ${member.roles.cache.has('1009736934765113415')}`);
 			}, 1000 * num);
 		}
 		else if (member.pending && member.roles.cache.has('1009736934765113415')) {
 			num++;
 			setTimeout(async () => {
 				await member.roles.remove(childOfLightRole).catch(console.error);
-				console.log(`S${count}. [remove] => ${member.user.tag} - ${member.pending} - ${member.roles.cache.has('1009736934765113415')}`);
+				console.log(`S${count}. [remove] => ${member.user.tag} - Pending: ${member.pending} - hasRole: ${member.roles.cache.has('1009736934765113415')}`);
 			}, 1000 * num);
 		}
 	});

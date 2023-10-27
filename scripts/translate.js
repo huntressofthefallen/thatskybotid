@@ -1,6 +1,7 @@
 const { Translate } = require('@google-cloud/translate').v2;
-
-const translate = new Translate();
+const projectId = 'funplus-user-center';
+const keyFilename = './fp-platform-translation.json'
+const translate = new Translate({ projectId, keyFilename});
 
 async function translateText(text, targetLanguage) {
 	try {

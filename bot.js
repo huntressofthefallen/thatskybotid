@@ -342,7 +342,7 @@ client.on(Events.MessageCreate, async (message) => {
 		translate(message.content, { to: 'id' }).then(async res => {
 			const embed = new EmbedBuilder()
 				.setTitle('Quick Dev Updates')
-				.setURL('https://discord.com/channels/575762611111592007/1077716001493356574')
+				.setURL(`https://discord.com/channels/575762611111592007/1077716001493356574/${message.id}`)
 				.setDescription(res)
 				.setAuthor({ name: message.member.displayName, iconURL: message.member.displayAvatarURL() })
 				.setFooter({ text: `${message.id}` })
@@ -365,7 +365,7 @@ client.on(Events.MessageCreate, async (message) => {
 		translate(message.content, { to: 'id' }).then(async res => {
 			const embed = new EmbedBuilder()
 				.setTitle('Known Issues')
-				.setURL('https://discord.com/channels/575762611111592007/628684058414678026')
+				.setURL(`https://discord.com/channels/575762611111592007/628684058414678026/${message.id}`)
 				.setDescription(res)
 				.setAuthor({ name: message.member.displayName, iconURL: message.member.displayAvatarURL() })
 				.setFooter({ text: `${message.id}` })
@@ -620,7 +620,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 		translate(newMessage.content, { to: 'id' }).then(async res => {
 			const embed = new EmbedBuilder()
 				.setTitle('Quick Dev Updates')
-				.setURL('https://discord.com/channels/575762611111592007/1077716001493356574')
+				.setURL(`https://discord.com/channels/575762611111592007/1077716001493356574/${newMessage.id}`)
 				.setDescription(res)
 				.setAuthor({ name: newMessage.member.displayName, iconURL: newMessage.member.displayAvatarURL() })
 				.setFooter({ text: `${newMessage.id}` })
@@ -649,7 +649,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 		translate(newMessage.content, { to: 'id' }).then(async res => {
 			const embed = new EmbedBuilder()
 				.setTitle('Known Issues')
-				.setURL('https://discord.com/channels/575762611111592007/628684058414678026')
+				.setURL(`https://discord.com/channels/575762611111592007/628684058414678026/${newMessage.id}`)
 				.setDescription(res)
 				.setAuthor({ name: newMessage.member.displayName, iconURL: newMessage.member.displayAvatarURL() })
 				.setFooter({ text: `${newMessage.id}` })
