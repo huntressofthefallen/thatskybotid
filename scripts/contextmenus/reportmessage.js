@@ -8,7 +8,7 @@ const modActionRowBuilder = require('../builders/modActionRow');
  * @param {boolean} options.hidden - Whether the reply should be ephemeral or not.
  */
 module.exports = async (interaction, options) => {
-	const message = await interaction.targetMessage.fetch().catch(err => console.error(err));
+	const message = await interaction.targetMessage.fetch().catch(err => console.error(err.message));
 
 	const embed = embedBuilder({
 		client: interaction.client,
@@ -22,8 +22,8 @@ module.exports = async (interaction, options) => {
 		],
 	});
 
-	const logChannel = await interaction.guild.channels.fetch('1016584787634442300').catch(err => console.error(err));
-	await logChannel.send({ embeds: [embed], components: modActionRowBuilder() }).catch(err => console.error(err));
+	const logChannel = await interaction.guild.channels.fetch('1016584787634442300').catch(err => console.error(err.message));
+	await logChannel.send({ embeds: [embed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
 
-	await interaction.editReply({ content: 'Laporan darimu telah kami terima! Karena alasan privasi dan keamanan kami tidak dapat memberitahu tindakan yang telah kami lakukan atas laporan darimu. Terima kasih atas dukungan dan laporan darimu untuk menjadikan server Sky: Anak-Anak Cahaya lebih baik!', ephemeral: options.hidden }).catch(err => console.error(err));
+	await interaction.editReply({ content: 'Laporan darimu telah kami terima! Karena alasan privasi dan keamanan kami tidak dapat memberitahu tindakan yang telah kami lakukan atas laporan darimu. Terima kasih atas dukungan dan laporan darimu untuk menjadikan server Sky: Anak-Anak Cahaya lebih baik!', ephemeral: options.hidden }).catch(err => console.error(err.message));
 };

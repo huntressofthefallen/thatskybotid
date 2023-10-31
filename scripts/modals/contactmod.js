@@ -36,7 +36,7 @@ module.exports = async (interaction) => {
 		.setFooter({ text: interaction.user.id, iconURL: interaction.user.displayAvatarURL() });
 
 	await interaction.guild.channels.fetch('1016584787634442300').then(async ch => {
-		await ch.send({ embeds: [embed], components: [replyact] }).catch(err => console.error(err));
-	}).catch(err => console.error(err));
-	await interaction.editReply({ content: 'Terima kasih telah mengisi formulir untuk menghubungi moderator. Sebagai informasi, kami telah menerima pesanmu dan akan membalas pesanmu melalui DM jika kami memerlukan informasi tambahan.\n\nKami memintamu untuk mengizinkan Direct Message dari Server ini agar kami dapat menghubungi kamu melalui DM\nInfo Selengkapnya: https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings-', ephemeral: true }).catch(err => console.error(err));
+		await ch.send({ embeds: [embed], components: [replyact] }).catch(err => console.error(err.message));
+	}).catch(err => console.error(err.message));
+	await interaction.editReply({ content: 'Terima kasih telah mengisi formulir untuk menghubungi moderator. Sebagai informasi, kami telah menerima pesanmu dan akan membalas pesanmu melalui DM jika kami memerlukan informasi tambahan.\n\nKami memintamu untuk mengizinkan Direct Message dari Server ini agar kami dapat menghubungi kamu melalui DM\nInfo Selengkapnya: https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings-', ephemeral: true }).catch(err => console.error(err.message));
 };

@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 const { connect, Schema, model, models } = require('mongoose');
-connect(process.env.smongodbtoken).catch(err => console.error(err));
+connect(process.env.smongodbtoken).catch(err => console.error(err.message));
 const automodSchema = new Schema({ word: String }, { timestamps: true });
 const manmodSchema = new Schema({ word: String }, { timestamps: true });
 const whitelistSchema = new Schema({ word: String }, { timestamps: true });

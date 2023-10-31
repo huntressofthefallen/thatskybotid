@@ -7,7 +7,7 @@
 // 	let hasMore = true;
 
 // 	do {
-// 		const batch = await guild.bans.fetch({ limit: 1000, after: startId }).catch(console.error);
+// 		const batch = await guild.bans.fetch({ limit: 1000, after: startId }).catch(err=>console.error(err.message));
 
 // 		if (!batch.size) {
 // 			hasMore = false;
@@ -31,9 +31,9 @@
  * @param {import('discord.js').Client} client - The Discord client
  */
 module.exports = async (client) => {
-	const idGuild = await client.guilds.fetch('1009644872065613864').catch(console.error);
-	const childOfLightRole = await idGuild.roles.fetch('1009736934765113415').catch(console.error);
-	const idMembers = await idGuild.members.fetch().catch(console.error);
+	const idGuild = await client.guilds.fetch('1009644872065613864').catch(err=>console.error(err.message));
+	const childOfLightRole = await idGuild.roles.fetch('1009736934765113415').catch(err=>console.error(err.message));
+	const idMembers = await idGuild.members.fetch().catch(err=>console.error(err.message));
 	let num = 0;
 	let count = 0;
 
@@ -43,14 +43,14 @@ module.exports = async (client) => {
 		if (!member.pending && !member.roles.cache.has('1009736934765113415')) {
 			num++;
 			setTimeout(async () => {
-				await member.roles.add(childOfLightRole).catch(console.error);
+				await member.roles.add(childOfLightRole).catch(err=>console.error(err.message));
 				console.log(`S${count}. [add] => ${member.user.tag} - Pending: ${member.pending} - hasRole: ${member.roles.cache.has('1009736934765113415')}`);
 			}, 1000 * num);
 		}
 		else if (member.pending && member.roles.cache.has('1009736934765113415')) {
 			num++;
 			setTimeout(async () => {
-				await member.roles.remove(childOfLightRole).catch(console.error);
+				await member.roles.remove(childOfLightRole).catch(err=>console.error(err.message));
 				console.log(`S${count}. [remove] => ${member.user.tag} - Pending: ${member.pending} - hasRole: ${member.roles.cache.has('1009736934765113415')}`);
 			}, 1000 * num);
 		}
@@ -59,9 +59,9 @@ module.exports = async (client) => {
 	// let numban = 0;
 
 	// Check Banned Users
-	// const globalGuild = await client.guilds.fetch('575762611111592007').catch(console.error);
-	// const idGuildBans = await fetchAllBans(idGuild).catch(console.error);
-	// const globalGuildBans = await fetchAllBans(globalGuild).catch(console.error);
+	// const globalGuild = await client.guilds.fetch('575762611111592007').catch(err=>console.error(err.message));
+	// const idGuildBans = await fetchAllBans(idGuild).catch(err=>console.error(err.message));
+	// const globalGuildBans = await fetchAllBans(globalGuild).catch(err=>console.error(err.message));
 
 	// idMembers.forEach(async member => {
 	// 	globalGuildBans.forEach(async guildBan => {
@@ -89,18 +89,18 @@ module.exports = async (client) => {
 	// 					],
 	// 				});
 
-	// 				await member.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(console.error);
+	// 				await member.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(err=>console.error(err.message));
 
 	// 				try {
-	// 					await member.ban({ deleteMessageSeconds: 7 * 24 * 60 * 60, reason: `Global Bans: ${guildBan.reason}` }).catch(console.error);
+	// 					await member.ban({ deleteMessageSeconds: 7 * 24 * 60 * 60, reason: `Global Bans: ${guildBan.reason}` }).catch(err=>console.error(err.message));
 	// 					actionStatus = true;
 	// 				}
 	// 				catch (err) {
-	// 					console.error(err);
+	// 					console.error(err.message);
 	// 				}
 
-	// 				const logChannel = await idGuild.channels.fetch('1016585021651427370').catch(console.error);
-	// 				await logChannel.send({ embeds: [logEmbed] }).catch(console.error);
+	// 				const logChannel = await idGuild.channels.fetch('1016585021651427370').catch(err=>console.error(err.message));
+	// 				await logChannel.send({ embeds: [logEmbed] }).catch(err=>console.error(err.message));
 
 	// 				// Create the log data object
 	// 				const logData = {
@@ -119,7 +119,7 @@ module.exports = async (client) => {
 	// 				};
 
 	// 				// Save the log data to the database
-	// 				await log.create(logData).catch(console.error);
+	// 				await log.create(logData).catch(err=>console.error(err.message));
 	// 			}, 5000 * numban);
 	// 		}
 	// 	});
@@ -139,11 +139,11 @@ module.exports = async (client) => {
 	// 	}
 	// });
 
-	// const banLogChannel = await idGuild.channels.fetch('1021379064763785266').catch(console.error);
+	// const banLogChannel = await idGuild.channels.fetch('1021379064763785266').catch(err=>console.error(err.message));
 	// banList.forEach(async (globalBanned, i) => {
 	// 	setTimeout(async () => {
-	// 		await idGuild.bans.create(globalBanned.user.id, { deleteMessageSeconds: 7 * 24 * 60 * 60, reason: `Global Bans: ${globalBanned.reason}` }).catch(console.error);
-	// 		await banLogChannel.send({ content: `[<t:${Math.round(new Date().getTime() / 1000)}:R>] 🔨 ${globalBanned.user.id} has been banned with Reason: ${globalBanned.reason}` }).catch(err => console.error(err));
+	// 		await idGuild.bans.create(globalBanned.user.id, { deleteMessageSeconds: 7 * 24 * 60 * 60, reason: `Global Bans: ${globalBanned.reason}` }).catch(err=>console.error(err.message));
+	// 		await banLogChannel.send({ content: `[<t:${Math.round(new Date().getTime() / 1000)}:R>] 🔨 ${globalBanned.user.id} has been banned with Reason: ${globalBanned.reason}` }).catch(err => console.error(err.message));
 	// 		console.log(`S-Global Bans (${i + 1}/${banList.length}): ${globalBanned.user.id} - Reason: ${globalBanned.reason}`);
 	// 	}, 5000 * i);
 	// });

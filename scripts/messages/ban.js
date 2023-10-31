@@ -40,7 +40,7 @@ module.exports = async (message, client, reason) => {
 	});
 
 	// Send the DM to the User
-	await user.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(err => console.error(err));
+	await user.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
 
 	// Check if the member is banable and perform the ban action
 	if (member.banable) {
@@ -49,13 +49,13 @@ module.exports = async (message, client, reason) => {
 			actionStatus = true;
 		}
 		catch (err) {
-			console.error(err);
+			console.error(err.message);
 		}
 	}
 
 	// Send the log embed to the log channel
-	const logChannel = await message.guild.channels.fetch('1016585021651427370').catch(err => console.error(err));
-	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err));
+	const logChannel = await message.guild.channels.fetch('1016585021651427370').catch(err => console.error(err.message));
+	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
 
 	const attachmentUrls = [];
 	if (message.attachments) {
@@ -83,7 +83,7 @@ module.exports = async (message, client, reason) => {
 	};
 
 	// Save the log data to the database
-	await log.create(logData).catch(err => console.error(err));
+	await log.create(logData).catch(err => console.error(err.message));
 };
 
 // Credits: Huntress of the Fallen

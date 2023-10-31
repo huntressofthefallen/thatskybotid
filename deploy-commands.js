@@ -224,6 +224,6 @@ const rest = new REST({ version: '10' }).setToken(S_TOKEN);
 
 rest.put(Routes.applicationGuildCommands(S_CLIENTID, '1009644872065613864'), { body: commands })
 	.then((data) => console.log(`Successfully registered ${data.length} application commands.`))
-	.catch(console.error);
+	.catch(err => console.error(err.message));
 
 // Credits: Huntress of the Fallen

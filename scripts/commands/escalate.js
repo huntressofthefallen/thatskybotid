@@ -17,7 +17,7 @@ module.exports = async (interaction, options) => {
 
 	if (!escalation) {
 		await warning(interaction, options);
-		await interaction.editReply({ content: 'An error occurred while processing the escalation step.', ephemeral: true }).catch(err => console.error(err));
+		await interaction.editReply({ content: 'An error occurred while processing the escalation step.', ephemeral: true }).catch(err => console.error(err.message));
 		return;
 	}
 

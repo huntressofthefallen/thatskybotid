@@ -37,7 +37,7 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
 			description: `Geyser yang Tercemar telah hadir di Pulau Tempat Suci di Padang Rumput Siang! Kunjungi Geyser ini sebelum <t:${tsdateend.getTime() / 1000}:t>. (<t:${tsdateend.getTime() / 1000}:R>)`,
 		});
 
-		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err));
+		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err.message));
 		return;
 	}
 	else {
@@ -48,7 +48,7 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
 			description: `Geyser yang Tercemar selanjutnya akan hadir pada <t:${tsdatestart.getTime() / 1000}:t> hingga <t:${tsdateend.getTime() / 1000}:t>. (<t:${tsdatestart.getTime() / 1000}:R>)\n\nCatat waktunya dan jangan sampai ketinggalan kesempatan untuk membersihkan kegelapan!`,
 		});
 
-		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err));
+		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err.message));
 		return;
 	}
 }

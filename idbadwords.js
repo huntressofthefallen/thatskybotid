@@ -40,7 +40,7 @@ const writeTransformedSettingsToFile = async () => {
 		await fs.writeFile(filePath, JSON.stringify(transformedSettings, null, 2));
 	}
 	catch (err) {
-		console.error(err);
+		console.error(err.message);
 	}
 };
 

@@ -35,9 +35,9 @@ module.exports = async (interaction) => {
 
 	await interaction.client.channels.fetch(args[0]).then(async ch => {
 		await ch.messages.fetch(args[1]).then(async m => {
-			await m.reply({ embeds: [embed], components: [replyact] }).catch(err => console.error(err));
-			await interaction.message.edit({ content: 'Kamu telah membalas pesan ini, mohon tunggu balasan dari kami.', components: [] }).catch(err => console.error(err));
-			await interaction.editReply({ content: 'Pesan terkirim, terima kasih telah membalas pesan kami. Mohon tunggu balasan dari kami selanjutnya.', ephemeral: true }).catch(err => console.error(err));
-		}).catch(err => console.error(err));
-	}).catch(err => console.error(err));
+			await m.reply({ embeds: [embed], components: [replyact] }).catch(err => console.error(err.message));
+			await interaction.message.edit({ content: 'Kamu telah membalas pesan ini, mohon tunggu balasan dari kami.', components: [] }).catch(err => console.error(err.message));
+			await interaction.editReply({ content: 'Pesan terkirim, terima kasih telah membalas pesan kami. Mohon tunggu balasan dari kami selanjutnya.', ephemeral: true }).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
+	}).catch(err => console.error(err.message));
 };

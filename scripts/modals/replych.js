@@ -26,11 +26,11 @@ module.exports = async (interaction) => {
 		.setFooter({ text: `${interaction.channel.id}-${interaction.message.id}`, iconURL: interaction.user.displayAvatarURL() });
 
 	await interaction.client.users.fetch(interaction.message.embeds[0].footer.text).then(async u => {
-		await interaction.message.edit({ content: `${interaction.user.tag} replied to this message.`, components: [] }).catch(err => console.error(err));
+		await interaction.message.edit({ content: `${interaction.user.tag} replied to this message.`, components: [] }).catch(err => console.error(err.message));
 		await interaction.message.reply({ embeds: [embed] }).then(async m => {
 			embed.setFooter({ text: `${interaction.channel.id}-${m.id}`, iconURL: interaction.user.displayAvatarURL() });
-			await u.send({ embeds: [embed], components: [replyact] }).catch(err => console.error(err));
-			await interaction.editReply({ content: 'Message Sent!', ephemeral: true }).catch(err => console.error(err));
-		}).catch(err => console.error(err));
-	}).catch(err => console.error(err));
+			await u.send({ embeds: [embed], components: [replyact] }).catch(err => console.error(err.message));
+			await interaction.editReply({ content: 'Message Sent!', ephemeral: true }).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
+	}).catch(err => console.error(err.message));
 };

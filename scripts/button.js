@@ -35,7 +35,7 @@ module.exports = async (interaction) => {
 		return;
 	}
 	else {
-		await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err));
+		await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 		return;
 	}
 };

@@ -57,7 +57,7 @@ module.exports = async (interaction, options) => {
 	});
 
 	// Send the DM to the User
-	await member.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(err => console.error(err));
+	await member.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
 
 	// Check if the member is moderatable and perform the timeout action
 	if (member.moderatable) {
@@ -66,17 +66,17 @@ module.exports = async (interaction, options) => {
 			actionStatus = true;
 		}
 		catch (err) {
-			console.error(err);
+			console.error(err.message);
 		}
 	}
 
 	// Send the log embed to the log channel
-	const logChannel = await interaction.guild.channels.fetch('1016584981147045979').catch(err => console.error(err));
-	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err));
+	const logChannel = await interaction.guild.channels.fetch('1016584981147045979').catch(err => console.error(err.message));
+	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
 
 	// Edit the interaction reply with the log embed
-	await interaction.message.edit({ content: `${member.user.tag} has been muted.`, components: null }).catch(err => console.error(err));
-	await interaction.editReply({ content: `${member.user.tag} has been muted.`, ephemeral: options.hidden }).catch(err => console.error(err));
+	await interaction.message.edit({ content: `${member.user.tag} has been muted.`, components: null }).catch(err => console.error(err.message));
+	await interaction.editReply({ content: `${member.user.tag} has been muted.`, ephemeral: options.hidden }).catch(err => console.error(err.message));
 
 	// Create the log data object
 	const logData = {
@@ -96,7 +96,7 @@ module.exports = async (interaction, options) => {
 	};
 
 	// Save the log data to the database
-	await log.create(logData).catch(err => console.error(err));
+	await log.create(logData).catch(err => console.error(err.message));
 };
 
 // Credits: Huntress of the Fallen

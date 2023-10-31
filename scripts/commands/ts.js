@@ -23,7 +23,7 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
 			description: `Roh Pengembara telah hadir di Rumah! Kunjungi Roh Pengembara ini sebelum <t:${tsdateend.getTime() / 1000}:F>`,
 		});
 
-		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err));
+		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err.message));
 		return;
 	}
 	else {
@@ -34,7 +34,7 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
 			description: `Roh Pengembara selanjutnya akan hadir pada <t:${tsdatestart.getTime() / 1000}:F> hingga <t:${tsdateend.getTime() / 1000}:F>.\n\nJangan lupa untuk catat tanggalnya!`,
 		});
 
-		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err));
+		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err.message));
 		return;
 	}
 }

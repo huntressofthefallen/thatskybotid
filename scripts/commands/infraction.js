@@ -14,7 +14,7 @@ module.exports = async (interaction, options) => {
 		description: '[Click Here to See the Infraction Logs](https://community.funplus.com/)',
 	});
 
-	await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err));
+	await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err.message));
 };
 
 // Credits: Huntress of the Fallen

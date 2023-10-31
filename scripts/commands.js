@@ -12,7 +12,7 @@ module.exports = async (interaction) => {
 	if (interaction.channel.id == '1030082965448962128' || showCommand) {
 		options.hidden = false;
 	}
-	await interaction.deferReply({ ephemeral: options.hidden }).catch(err => console.error(err));
+	await interaction.deferReply({ ephemeral: options.hidden }).catch(err => console.error(err.message));
 
 	if (interaction.commandName == 'help') {
 		require('./commands/help')(interaction, options);
@@ -71,7 +71,7 @@ module.exports = async (interaction) => {
 		return;
 	}
 	else {
-		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err));
+		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 		return;
 	}
 };

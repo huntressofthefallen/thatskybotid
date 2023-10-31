@@ -19,7 +19,7 @@ module.exports = async (interaction, options) => {
 		description: '[Click Here to Edit the Warnings or any actions taken](https://community.funplus.com/)',
 	});
 
-	await interaction.editReply({ embeds: [responseEmbed], ephemeral: options.hidden }).catch(err => console.error(err));
+	await interaction.editReply({ embeds: [responseEmbed], ephemeral: options.hidden }).catch(err => console.error(err.message));
 };
 
 // Credits: Huntress of the Fallen

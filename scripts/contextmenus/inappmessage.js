@@ -37,7 +37,7 @@ function convertToString(milliseconds) {
  * @param {boolean} options.hidden - Whether the reply should be ephemeral or not.
  */
 module.exports = async (interaction, options) => {
-	await interaction.targetMessage.fetch().catch((err) => console.error(err));
+	await interaction.targetMessage.fetch().catch((err) => console.error(err.message));
 	const userId = interaction.targetMessage.author.id;
 	const guildId = interaction.guild.id;
 	options.reason = 'Mengirimkan pesan yang melanggar peraturan. Baca peraturan server di sini: <#1010418542266560532>';
@@ -69,7 +69,7 @@ module.exports = async (interaction, options) => {
 	}
 
 	if (interaction.targetMessage.deletable) {
-		await interaction.targetMessage.delete().catch(err => console.error(err));
+		await interaction.targetMessage.delete().catch(err => console.error(err.message));
 	}
 };
 

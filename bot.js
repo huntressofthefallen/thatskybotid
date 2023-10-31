@@ -57,18 +57,18 @@ const translate = require('./scripts/translate');
 client.on(Events.MessageCreate, async (message) => {
 	const idbadwords = require('./database/idbadwords.json');
 	if (message.partial) {
-		await message.fetch().catch(err => console.error(err));
+		await message.fetch().catch(err => console.error(err.message));
 	}
 	if (message.member) {
 		if (message.member.partial) {
-			await message.member.fetch().catch(err => console.error(err));
+			await message.member.fetch().catch(err => console.error(err.message));
 		}
 	}
 	if (message.channel.partial) {
-		await message.channel.fetch().catch(err => console.error(err));
+		await message.channel.fetch().catch(err => console.error(err.message));
 	}
 	if (message.author.partial) {
-		await message.author.fetch().catch(err => console.error(err));
+		await message.author.fetch().catch(err => console.error(err.message));
 	}
 
 	if (message.author.bot || message.channel.type == ChannelType.DM) {
@@ -152,9 +152,9 @@ client.on(Events.MessageCreate, async (message) => {
 				if (spam || mentionSpam) {
 					await message.channel.messages.fetch({ limit: 100 }).then(async (messagesFetched) => {
 						messagesFetched.filter(m => m.author.id === message.author.id).forEach(async messageFetched => {
-							await messageFetched.delete().catch(err => console.error(err));
+							await messageFetched.delete().catch(err => console.error(err.message));
 						});
-					}).catch(err => console.error(err));
+					}).catch(err => console.error(err.message));
 
 					const userId = message.author.id;
 					const guildId = message.guild.id;
@@ -246,7 +246,7 @@ client.on(Events.MessageCreate, async (message) => {
 						}
 					});
 
-					const guildInvites = await message.guild.invites.fetch().catch(err => console.error(err));
+					const guildInvites = await message.guild.invites.fetch().catch(err => console.error(err.message));
 					let thisGuildInvite = false;
 					const htMessage = message.content.toLowerCase().replace(/\s/g, '');
 					guildInvites.forEach(guildInvite => {
@@ -283,7 +283,7 @@ client.on(Events.MessageCreate, async (message) => {
 					}
 
 					if (severity == 2) {
-						await message.delete().catch(err => console.error(err));
+						await message.delete().catch(err => console.error(err.message));
 
 						const userId = message.author.id;
 						const guildId = message.guild.id;
@@ -326,16 +326,16 @@ client.on(Events.MessageCreate, async (message) => {
 						});
 
 						await message.guild.channels.fetch('1030082965448962128').then(async ch => {
-							await ch.send({ embeds: [embed], components: [...modActionRow(), safeActionRow] }).catch(err => console.error(err));
-						}).catch(err => console.error(err));
+							await ch.send({ embeds: [embed], components: [...modActionRow(), safeActionRow] }).catch(err => console.error(err.message));
+						}).catch(err => console.error(err.message));
 					}
 				}
 			}
-		}).catch(err => console.error(err));
+		}).catch(err => console.error(err.message));
 	}
 	else if (message.channel.type == ChannelType.GuildAnnouncement && message.guild.id == '1009644872065613864') {
 		if (message.crosspostable) {
-			await message.crosspost().catch(err => console.error(err));
+			await message.crosspost().catch(err => console.error(err.message));
 		}
 	}
 	else if (message.channel.type == ChannelType.GuildAnnouncement && message.guild.id == '575762611111592007' && message.channel.id == '1077716001493356574') {
@@ -354,12 +354,12 @@ client.on(Events.MessageCreate, async (message) => {
 				await g.channels.fetch('1077754426573467798').then(async (ch) => {
 					await ch.send({ embeds: [embed] }).then(async (mes) => {
 						if (mes.crosspostable) {
-							await mes.crosspost().catch(err => console.error(err));
+							await mes.crosspost().catch(err => console.error(err.message));
 						}
-					}).catch(err => console.error(err));
-				}).catch(err => console.error(err));
-			}).catch(err => console.error(err));
-		}).catch(err => console.error(err));
+					}).catch(err => console.error(err.message));
+				}).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
 	}
 	else if (message.channel.type == ChannelType.GuildAnnouncement && message.guild.id == '575762611111592007' && message.channel.id == '628684058414678026') {
 		translate(message.content, { to: 'id' }).then(async res => {
@@ -377,30 +377,30 @@ client.on(Events.MessageCreate, async (message) => {
 				await g.channels.fetch('1009676463676588103').then(async (ch) => {
 					await ch.send({ embeds: [embed] }).then(async (mes) => {
 						if (mes.crosspostable) {
-							await mes.crosspost().catch(err => console.error(err));
+							await mes.crosspost().catch(err => console.error(err.message));
 						}
-					}).catch(err => console.error(err));
-				}).catch(err => console.error(err));
-			}).catch(err => console.error(err));
-		}).catch(err => console.error(err));
+					}).catch(err => console.error(err.message));
+				}).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
 	}
 });
 
 client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 	const idbadwords = require('./database/idbadwords.json');
 	if (newMessage.partial) {
-		await newMessage.fetch().catch(err => console.error(err));
+		await newMessage.fetch().catch(err => console.error(err.message));
 	}
 	if (newMessage.author.partial) {
-		await newMessage.author.fetch().catch(err => console.error(err));
+		await newMessage.author.fetch().catch(err => console.error(err.message));
 	}
 	if (newMessage.member) {
 		if (newMessage.member.partial) {
-			await newMessage.member.fetch().catch(err => console.error(err));
+			await newMessage.member.fetch().catch(err => console.error(err.message));
 		}
 	}
 	if (newMessage.channel.partial) {
-		await newMessage.channel.fetch().catch(err => console.error(err));
+		await newMessage.channel.fetch().catch(err => console.error(err.message));
 	}
 
 	if (newMessage.author.bot || newMessage.channel.type == ChannelType.DM) {
@@ -527,7 +527,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 					}
 				});
 
-				const guildInvites = await newMessage.guild.invites.fetch().catch(err => console.error(err));
+				const guildInvites = await newMessage.guild.invites.fetch().catch(err => console.error(err.message));
 				let thisGuildInvite = false;
 				const htMessage = newMessage.content.toLowerCase().replace(/\s/g, '');
 				guildInvites.forEach(guildInvite => {
@@ -567,7 +567,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 					.addComponents([SafeButt]);
 
 				if (severity == 2) {
-					await newMessage.delete().catch(err => console.error(err));
+					await newMessage.delete().catch(err => console.error(err.message));
 
 					const userId = newMessage.author.id;
 					const guildId = newMessage.guild.id;
@@ -610,11 +610,11 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 					});
 
 					await newMessage.guild.channels.fetch('1030082965448962128').then(async ch => {
-						await ch.send({ embeds: [embed], components: [...modActionRow(), safeActionRow] }).catch(err => console.error(err));
-					}).catch(err => console.error(err));
+						await ch.send({ embeds: [embed], components: [...modActionRow(), safeActionRow] }).catch(err => console.error(err.message));
+					}).catch(err => console.error(err.message));
 				}
 			}
-		}).catch(err => console.error(err));
+		}).catch(err => console.error(err.message));
 	}
 	else if (newMessage.channel.type == ChannelType.GuildAnnouncement && newMessage.guild.id == '575762611111592007' && newMessage.channel.id == '1077716001493356574') {
 		translate(newMessage.content, { to: 'id' }).then(async res => {
@@ -635,15 +635,15 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 							if (msg.embeds[0] && msg.embeds[0].footer.text == newMessage.id) {
 								await msg.edit({ embeds: [embed] }).then(async (mes) => {
 									if (mes.crosspostable) {
-										await mes.crosspost().catch(err => console.error(err));
+										await mes.crosspost().catch(err => console.error(err.message));
 									}
-								}).catch(err => console.error(err));
+								}).catch(err => console.error(err.message));
 							}
 						});
-					}).catch(err => console.error(err));
-				}).catch(err => console.error(err));
-			}).catch(err => console.error(err));
-		}).catch(err => console.error(err));
+					}).catch(err => console.error(err.message));
+				}).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
 	}
 	else if (newMessage.channel.type == ChannelType.GuildAnnouncement && newMessage.guild.id == '575762611111592007' && newMessage.channel.id == '628684058414678026') {
 		translate(newMessage.content, { to: 'id' }).then(async res => {
@@ -664,15 +664,15 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 							if (msg.embeds[0] && msg.embeds[0].footer.text == newMessage.id) {
 								await msg.edit({ embeds: [embed] }).then(async (mes) => {
 									if (mes.crosspostable) {
-										await mes.crosspost().catch(err => console.error(err));
+										await mes.crosspost().catch(err => console.error(err.message));
 									}
-								}).catch(err => console.error(err));
+								}).catch(err => console.error(err.message));
 							}
 						});
-					}).catch(err => console.error(err));
-				}).catch(err => console.error(err));
-			}).catch(err => console.error(err));
-		}).catch(err => console.error(err));
+					}).catch(err => console.error(err.message));
+				}).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
 	}
 });
 
@@ -683,12 +683,12 @@ client.on(Events.MessageDelete, async (message) => {
 				await ch.messages.fetch({ limit: 100 }).then(async msgs => {
 					msgs.forEach(async msg => {
 						if (msg.embeds[0] && msg.embeds[0].footer.text == message.id) {
-							await msg.delete().catch(err => console.error(err));
+							await msg.delete().catch(err => console.error(err.message));
 						}
 					});
-				}).catch(err => console.error(err));
-			}).catch(err => console.error(err));
-		}).catch(err => console.error(err));
+				}).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
 	}
 	else if (message.channel.type == ChannelType.GuildAnnouncement && message.guild.id == '575762611111592007' && message.channel.id == '628684058414678026') {
 		await client.guilds.fetch('1009644872065613864').then(async (g) => {
@@ -696,12 +696,12 @@ client.on(Events.MessageDelete, async (message) => {
 				await ch.messages.fetch({ limit: 100 }).then(async msgs => {
 					msgs.forEach(async msg => {
 						if (msg.embeds[0] && msg.embeds[0].footer.text == message.id) {
-							await msg.delete().catch(err => console.error(err));
+							await msg.delete().catch(err => console.error(err.message));
 						}
 					});
-				}).catch(err => console.error(err));
-			}).catch(err => console.error(err));
-		}).catch(err => console.error(err));
+				}).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
 	}
 });
 
@@ -739,7 +739,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			require('./scripts/contextmenu')(interaction);
 		}
 		else {
-			await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err));
+			await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 		}
 	}
 	else if (interaction.guild.id == '902592618444255252') {
@@ -759,7 +759,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 				require('./scripts/button')(interaction);
 			}
 			else {
-				await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err));
+				await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 			}
 		}
 		else if (interaction.isModalSubmit()) {
@@ -767,21 +767,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
 				require('./scripts/modals')(interaction);
 			}
 			else {
-				await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err));
+				await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 			}
 		}
 		else {
-			await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err));
+			await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 		}
 	}
 	else {
-		await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err));
+		await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 	}
 });
 
 client.on(Events.GuildMemberAdd, async (member) => {
 	if (member.partial) {
-		await member.fetch().catch(err => console.error(err));
+		await member.fetch().catch(err => console.error(err.message));
 	}
 	if (member.guild.id == '1009644872065613864') {
 		let banned = false;
@@ -797,7 +797,7 @@ client.on(Events.GuildMemberAdd, async (member) => {
 							.setTimestamp()
 							.setFooter({ text: 'Global Server Auto Ban', iconURL: client.user.displayAvatarURL() });
 						embed.setTitle(`Halo ${member.user.username},`).setDescription(`Kamu telah diban dari ${member.guild.name} dengan alasan telah diban dari Server Global dengan alasan __${gban.reason}__\n\nUntuk mengajukan banding atas ban yang kamu terima, kamu dapat menghubungi kami melalui server berikut ini:\nhttps://bit.ly/SkyDiscordBanReview`);
-						await member.send({ embeds: [embed] }).catch(err => console.error(err));
+						await member.send({ embeds: [embed] }).catch(err => console.error(err.message));
 
 						const data = { id: member.user.id, category: 'ban', reason: `Global: ${gban.reason}`, mod: client.user.id };
 						log.create(data).then(async () => {
@@ -805,14 +805,14 @@ client.on(Events.GuildMemberAdd, async (member) => {
 								await member.guild.channels.fetch('1016585021651427370').then(async ch => {
 									embed.setTitle('Global Auto Ban Log').setDescription(`${member.user.tag} has been banned.`).setFields({ name: 'Moderator', value: `${client.user.tag}`, inline: false }, { name: 'Reason', value: `Global: ${gban.reason}`, inline: false });
 									// eslint-disable-next-line max-nested-callbacks
-									await ch.send({ embeds: [embed] }).catch(err => console.error(err));
-								}).catch(err => console.error(err));
-							}).catch(err => console.error(err));
-						}).catch(err => console.error(err));
+									await ch.send({ embeds: [embed] }).catch(err => console.error(err.message));
+								}).catch(err => console.error(err.message));
+							}).catch(err => console.error(err.message));
+						}).catch(err => console.error(err.message));
 					}
 				});
-			}).catch(err => console.error(err));
-		}).catch(err => console.error(err));
+			}).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
 
 		if (!banned) {
 			const embed = new EmbedBuilder()
@@ -824,7 +824,7 @@ client.on(Events.GuildMemberAdd, async (member) => {
 				.setTimestamp()
 				.setFooter({ text: member.id, iconURL: member.displayAvatarURL() });
 
-			await member.send({ embeds: [embed] }).catch(err => console.error(err));
+			await member.send({ embeds: [embed] }).catch(err => console.error(err.message));
 		}
 	}
 });
@@ -834,32 +834,32 @@ client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 		await newMember.fetch().catch(console.error);
 		if (oldMember.pending && !newMember.pending) {
 			await newMember.guild.roles.fetch('1009736934765113415').then(async r => {
-				await newMember.roles.add(r).catch(err => console.error(err));
-			}).catch(err => console.error(err));
+				await newMember.roles.add(r).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
 		}
 		else if (!newMember.pending) {
 			await newMember.guild.roles.fetch('1009736934765113415').then(async r => {
-				await newMember.roles.add(r).catch(err => console.error(err));
-			}).catch(err => console.error(err));
+				await newMember.roles.add(r).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
 		}
 	}
 });
 
 client.on(Events.GuildBanAdd, async (ban) => {
 	if (ban.partial) {
-		await ban.fetch().catch(err => console.error(err));
+		await ban.fetch().catch(err => console.error(err.message));
 	}
 	if (ban.user.partial) {
-		await ban.user.fetch().catch(err => console.error(err));
+		await ban.user.fetch().catch(err => console.error(err.message));
 	}
 	if (ban.guild.id == '575762611111592007') {
-		const idGuild = await client.guilds.fetch('1016585021651427370').catch(err => console.error(err));
+		const idGuild = await client.guilds.fetch('1016585021651427370').catch(err => console.error(err.message));
 		let actionStatus = false;
 		const dmStatus = false;
 		await idGuild.bans.create(ban.user.id, { reason: ban.reason }).then(async () => {
 			actionStatus = true;
 
-			const logChannel = await idGuild.channels.fetch('1016585021651427370').catch(err => console.error(err));
+			const logChannel = await idGuild.channels.fetch('1016585021651427370').catch(err => console.error(err.message));
 			const logEmbed = embedBuilder({
 				client,
 				user: ban.user,
@@ -870,7 +870,7 @@ client.on(Events.GuildBanAdd, async (ban) => {
 					{ name: 'Moderator', value: 'Global Auto Ban', inline: false },
 				],
 			});
-			await logChannel.send({ embeds: [logEmbed] }).catch(err => console.error(err));
+			await logChannel.send({ embeds: [logEmbed] }).catch(err => console.error(err.message));
 
 			// Create the log data object
 			const logData = {
@@ -889,26 +889,26 @@ client.on(Events.GuildBanAdd, async (ban) => {
 			};
 
 			// Save the log data to the database
-			await log.create(logData).catch(err => console.error(err));
-		}).catch(err => console.error(err));
+			await log.create(logData).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
 	}
 });
 
 client.on(Events.GuildBanRemove, async (ban) => {
 	if (ban.partial) {
-		await ban.fetch().catch(err => console.error(err));
+		await ban.fetch().catch(err => console.error(err.message));
 	}
 	if (ban.user.partial) {
-		await ban.user.fetch().catch(err => console.error(err));
+		await ban.user.fetch().catch(err => console.error(err.message));
 	}
 	if (ban.guild.id == '575762611111592007') {
-		const idGuild = await client.guilds.fetch('1016585021651427370').catch(err => console.error(err));
+		const idGuild = await client.guilds.fetch('1016585021651427370').catch(err => console.error(err.message));
 		let actionStatus = false;
 		const dmStatus = false;
 		await idGuild.bans.remove(ban.user.id, { reason: ban.reason }).then(async () => {
 			actionStatus = true;
 
-			const logChannel = await idGuild.channels.fetch('1016585021651427370').catch(err => console.error(err));
+			const logChannel = await idGuild.channels.fetch('1016585021651427370').catch(err => console.error(err.message));
 			const logEmbed = embedBuilder({
 				client,
 				user: ban.user,
@@ -919,7 +919,7 @@ client.on(Events.GuildBanRemove, async (ban) => {
 					{ name: 'Moderator', value: 'Global Auto Unban', inline: false },
 				],
 			});
-			await logChannel.send({ embeds: [logEmbed] }).catch(err => console.error(err));
+			await logChannel.send({ embeds: [logEmbed] }).catch(err => console.error(err.message));
 
 			// Create the log data object
 			const logData = {
@@ -938,25 +938,25 @@ client.on(Events.GuildBanRemove, async (ban) => {
 			};
 
 			// Save the log data to the database
-			await log.create(logData).catch(err => console.error(err));
-		}).catch(err => console.error(err));
+			await log.create(logData).catch(err => console.error(err.message));
+		}).catch(err => console.error(err.message));
 	}
 });
 
 client.on(Events.MessageReactionAdd, async (reaction, user) => {
 	if (reaction.partial) {
-		await reaction.fetch().catch(err => console.error(err));
+		await reaction.fetch().catch(err => console.error(err.message));
 	}
 	if (reaction.message) {
 		if (reaction.message.partial) {
-			await reaction.message.fetch().catch(err => console.error(err));
+			await reaction.message.fetch().catch(err => console.error(err.message));
 			if (reaction.message.channel.partial) {
-				await reaction.message.channel.fetch().catch(err => console.error(err));
+				await reaction.message.channel.fetch().catch(err => console.error(err.message));
 			}
 		}
 	}
 	if (user.partial) {
-		await user.fetch().catch(err => console.error(err));
+		await user.fetch().catch(err => console.error(err.message));
 	}
 	if (user.bot) {
 		return;
@@ -973,41 +973,41 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 						else if (ch.id == '1010418851000885351' || ch.id == '1010443793578852402') {
 							const limited = rateLimiter.take(u.id);
 							if (limited) {
-								await user.send({ content: 'Pengambilan peran gagal, mohon dicoba lagi.' }).catch(err => console.error(err));
+								await user.send({ content: 'Pengambilan peran gagal, mohon dicoba lagi.' }).catch(err => console.error(err.message));
 							}
 							else {
 								roleReaction.forEach(async (r) => {
 									if (reaction.emoji.toString() == r.RID) {
 										await message.guild.roles.fetch(r.ID).then(async (role) => {
 											await message.guild.members.fetch(u.id).then(async (member) => {
-												await member.roles.add(role).catch(err => console.error(err));
-											}).catch(err => console.error(err));
-										}).catch(err => console.error(err));
+												await member.roles.add(role).catch(err => console.error(err.message));
+											}).catch(err => console.error(err.message));
+										}).catch(err => console.error(err.message));
 									}
 								});
 							}
 						}
-					}).catch(err => console.error(err));
-				}).catch(err => console.error(err));
-			}).catch(err => console.error(err));
+					}).catch(err => console.error(err.message));
+				}).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
 		}
 	}
 });
 
 client.on(Events.MessageReactionRemove, async (reaction, user) => {
 	if (reaction.partial) {
-		await reaction.fetch().catch(err => console.error(err));
+		await reaction.fetch().catch(err => console.error(err.message));
 	}
 	if (reaction.message) {
 		if (reaction.message.partial) {
-			await reaction.message.fetch().catch(err => console.error(err));
+			await reaction.message.fetch().catch(err => console.error(err.message));
 			if (reaction.message.channel.partial) {
-				await reaction.message.channel.fetch().catch(err => console.error(err));
+				await reaction.message.channel.fetch().catch(err => console.error(err.message));
 			}
 		}
 	}
 	if (user.partial) {
-		await user.fetch().catch(err => console.error(err));
+		await user.fetch().catch(err => console.error(err.message));
 	}
 	if (user.bot) {
 		return;
@@ -1026,15 +1026,15 @@ client.on(Events.MessageReactionRemove, async (reaction, user) => {
 								if (reaction.emoji.toString() == r.RID) {
 									await message.guild.roles.fetch(r.ID).then(async (role) => {
 										await message.guild.members.fetch(u.id).then(async (member) => {
-											await member.roles.remove(role).catch(err => console.error(err));
-										}).catch(err => console.error(err));
-									}).catch(err => console.error(err));
+											await member.roles.remove(role).catch(err => console.error(err.message));
+										}).catch(err => console.error(err.message));
+									}).catch(err => console.error(err.message));
 								}
 							});
 						}
-					}).catch(err => console.error(err));
-				}).catch(err => console.error(err));
-			}).catch(err => console.error(err));
+					}).catch(err => console.error(err.message));
+				}).catch(err => console.error(err.message));
+			}).catch(err => console.error(err.message));
 		}
 	}
 });

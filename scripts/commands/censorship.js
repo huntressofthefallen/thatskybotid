@@ -16,7 +16,7 @@ module.exports = async (interaction, options) => {
 	const args = word.trim().split(/ +/);
 
 	if (args[1]) {
-		await interaction.editReply({ content: `Error 403 - ${word} should be only 1 word.`, ephemeral: options.hidden }).catch(err => console.error(err));
+		await interaction.editReply({ content: `Error 403 - ${word} should be only 1 word.`, ephemeral: options.hidden }).catch(err => console.error(err.message));
 		return;
 	}
 
@@ -35,7 +35,7 @@ module.exports = async (interaction, options) => {
 				? `${word} - has been successfully updated in the Manual Mod Database.`
 				: 'Error 404 - Command not found.';
 
-		await interaction.editReply({ content: response, ephemeral: options.hidden }).catch(err => console.error(err));
+		await interaction.editReply({ content: response, ephemeral: options.hidden }).catch(err => console.error(err.message));
 	}
 	else if (subcommand === 'remove') {
 		const category = interaction.options.getString('category');
@@ -50,14 +50,14 @@ module.exports = async (interaction, options) => {
 			? `${word} - has been successfully deleted in the Whitelist Database.`
 			: `${word} - has been successfully deleted in the Censorship Database.`;
 
-		await interaction.editReply({ content: response, ephemeral: options.hidden }).catch(err => console.error(err));
+		await interaction.editReply({ content: response, ephemeral: options.hidden }).catch(err => console.error(err.message));
 	}
 	else if (subcommand === 'whitelist') {
 		await updateWhitelistWords(interaction.guildId, [word]);
-		await interaction.editReply({ content: `${word} - has been successfully updated in the Whitelist Database.`, ephemeral: options.hidden }).catch(err => console.error(err));
+		await interaction.editReply({ content: `${word} - has been successfully updated in the Whitelist Database.`, ephemeral: options.hidden }).catch(err => console.error(err.message));
 	}
 	else {
-		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err));
+		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 	}
 };
 

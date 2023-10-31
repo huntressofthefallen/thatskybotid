@@ -10,8 +10,8 @@ const { log } = require('../../database/lib/s');
  */
 module.exports = async (interaction, options) => {
 	// Fetch the user and member objects from the interaction
-	const user = await interaction.options.getUser('user').fetch().catch(err => console.error(err));
-	const member = await interaction.options.getMember('user').fetch().catch(err => console.error(err));
+	const user = await interaction.options.getUser('user').fetch().catch(err => console.error(err.message));
+	const member = await interaction.options.getMember('user').fetch().catch(err => console.error(err.message));
 	const reason = interaction.options.getString('reason');
 	let actionStatus = false;
 
@@ -34,16 +34,16 @@ module.exports = async (interaction, options) => {
 			actionStatus = true;
 		}
 		catch (err) {
-			console.error(err);
+			console.error(err.message);
 		}
 	}
 
 	// Send the log embed to the log channel
-	const logChannel = await interaction.guild.channels.fetch('1016584981147045979').catch(err => console.error(err));
-	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err));
+	const logChannel = await interaction.guild.channels.fetch('1016584981147045979').catch(err => console.error(err.message));
+	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
 
 	// Edit the interaction reply with the log embed
-	await interaction.editReply({ embeds: [logEmbed], ephemeral: options.hidden }).catch(err => console.error(err));
+	await interaction.editReply({ embeds: [logEmbed], ephemeral: options.hidden }).catch(err => console.error(err.message));
 
 	// Create the log data object
 	const logData = {
@@ -61,7 +61,7 @@ module.exports = async (interaction, options) => {
 	};
 
 	// Save the log data to the database
-	await log.create(logData).catch(err => console.error(err));
+	await log.create(logData).catch(err => console.error(err.message));
 };
 
 // Credits: Huntress of the Fallen

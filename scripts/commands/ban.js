@@ -12,8 +12,8 @@ module.exports = async (interaction, options) => {
 	// Fetch the user and member objects from the interaction
 	let user, member, reason;
 	if (interaction.isChatInputCommand()) {
-		user = await interaction.options.getUser('user').fetch().catch(err => console.error(err));
-		member = await interaction.options.getMember('user').fetch().catch(err => console.error(err));
+		user = await interaction.options.getUser('user').fetch().catch(err => console.error(err.message));
+		member = await interaction.options.getMember('user').fetch().catch(err => console.error(err.message));
 		reason = interaction.options.getString('reason');
 	}
 	else if (interaction.isMessageContextMenuCommand()) {
@@ -46,7 +46,7 @@ module.exports = async (interaction, options) => {
 	});
 
 	// Send the DM to the User
-	await user.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(err => console.error(err));
+	await user.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
 
 	// Check if the member is banable and perform the ban action
 	try {
@@ -54,15 +54,15 @@ module.exports = async (interaction, options) => {
 		actionStatus = true;
 	}
 	catch (err) {
-		console.error(err);
+		console.error(err.message);
 	}
 
 	// Send the log embed to the log channel
-	const logChannel = await interaction.guild.channels.fetch('1016585021651427370').catch(err => console.error(err));
-	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err));
+	const logChannel = await interaction.guild.channels.fetch('1016585021651427370').catch(err => console.error(err.message));
+	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
 
 	// Edit the interaction reply with the log embed
-	await interaction.editReply({ embeds: [logEmbed], ephemeral: options.hidden }).catch(err => console.error(err));
+	await interaction.editReply({ embeds: [logEmbed], ephemeral: options.hidden }).catch(err => console.error(err.message));
 
 	// Create the log data object
 	const logData = {
@@ -81,7 +81,7 @@ module.exports = async (interaction, options) => {
 	};
 
 	// Save the log data to the database
-	await log.create(logData).catch(err => console.error(err));
+	await log.create(logData).catch(err => console.error(err.message));
 };
 
 // Credits: Huntress of the Fallen
