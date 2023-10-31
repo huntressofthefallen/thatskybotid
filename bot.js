@@ -124,7 +124,7 @@ client.on(Events.MessageCreate, async (message) => {
 				// 						{ name: 'Flagged', value: moderationResponse.data.results[0].flagged ? '🔴 Not Safe' : '🟢 Safe', inline: false },
 				// 					],
 				// 				});
-				// 				await testChannel.send({ content: message.url, embeds: [moderationEmbed] }).catch(console.error);
+				// 				await testChannel.send({ content: message.url, embeds: [moderationEmbed] }).catch(err=>console.error(err.message));
 				// 			});
 				// 		}
 				// 	}
@@ -456,7 +456,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 				// 						{ name: 'Flagged', value: moderationResponse.data.results[0].flagged ? '🔴 Not Safe' : '🟢 Safe', inline: false },
 				// 					],
 				// 				});
-				// 				await testChannel.send({ content: newMessage.url, embeds: [moderationEmbed] }).catch(console.error);
+				// 				await testChannel.send({ content: newMessage.url, embeds: [moderationEmbed] }).catch(err=>console.error(err.message));
 				// 			});
 				// 		}
 				// 	}
@@ -831,7 +831,7 @@ client.on(Events.GuildMemberAdd, async (member) => {
 
 client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 	if (newMember.guild.id == '1009644872065613864') {
-		await newMember.fetch().catch(console.error);
+		await newMember.fetch().catch(err => console.error(err.message));
 		if (oldMember.pending && !newMember.pending) {
 			await newMember.guild.roles.fetch('1009736934765113415').then(async r => {
 				await newMember.roles.add(r).catch(err => console.error(err.message));
