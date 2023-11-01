@@ -54,6 +54,8 @@ const muteMessage = require('./scripts/messages/mute');
 
 const translate = require('./scripts/translate');
 
+const fetchAllBans = require('./scripts/src/fetchAllBans');
+
 client.on(Events.MessageCreate, async (message) => {
 	const idbadwords = require('./database/idbadwords.json');
 	if (message.partial) {
@@ -785,34 +787,33 @@ client.on(Events.GuildMemberAdd, async (member) => {
 	}
 	if (member.guild.id == '1009644872065613864') {
 		let banned = false;
-		await client.guilds.fetch('575762611111592007').then(async gg => {
-			await gg.bans.fetch().then(async gbans => {
-				gbans.forEach(async gban => {
-					if (member.user.id == gban.user.id) {
-						banned = true;
-						const embed = new EmbedBuilder()
-							.setAuthor({ name: 'thatskybotid', url: 'https://bit.ly/m/thatskygameid', iconURL: client.user.displayAvatarURL() })
-							.setThumbnail('https://img2.storyblok.com/fit-in/0x300/filters:format(webp)/f/108104/368x415/436d2e239c/sky-logo-white.png')
-							.setColor('Random')
-							.setTimestamp()
-							.setFooter({ text: 'Global Server Auto Ban', iconURL: client.user.displayAvatarURL() });
-						embed.setTitle(`Halo ${member.user.username},`).setDescription(`Kamu telah diban dari ${member.guild.name} dengan alasan telah diban dari Server Global dengan alasan __${gban.reason}__\n\nUntuk mengajukan banding atas ban yang kamu terima, kamu dapat menghubungi kami melalui server berikut ini:\nhttps://bit.ly/SkyDiscordBanReview`);
-						await member.send({ embeds: [embed] }).catch(err => console.error(err.message));
+		const globalGuild = await client.guilds.fetch('575762611111592007').catch(err => console.error(err.message));
+		const globalGuildBans = await fetchAllBans(globalGuild).catch(err => console.error(err.message));
 
-						const data = { id: member.user.id, category: 'ban', reason: `Global: ${gban.reason}`, mod: client.user.id };
-						log.create(data).then(async () => {
-							await member.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason: `Global: ${gban.reason}` }).then(async () => {
-								await member.guild.channels.fetch('1016585021651427370').then(async ch => {
-									embed.setTitle('Global Auto Ban Log').setDescription(`${member.user.tag} has been banned.`).setFields({ name: 'Moderator', value: `${client.user.tag}`, inline: false }, { name: 'Reason', value: `Global: ${gban.reason}`, inline: false });
-									// eslint-disable-next-line max-nested-callbacks
-									await ch.send({ embeds: [embed] }).catch(err => console.error(err.message));
-								}).catch(err => console.error(err.message));
-							}).catch(err => console.error(err.message));
+		globalGuildBans.forEach(async gban => {
+			if (member.user.id == gban.user.id) {
+				banned = true;
+				const embed = new EmbedBuilder()
+					.setAuthor({ name: 'thatskybotid', url: 'https://bit.ly/m/thatskygameid', iconURL: client.user.displayAvatarURL() })
+					.setThumbnail('https://img2.storyblok.com/fit-in/0x300/filters:format(webp)/f/108104/368x415/436d2e239c/sky-logo-white.png')
+					.setColor('Random')
+					.setTimestamp()
+					.setFooter({ text: 'Global Server Auto Ban', iconURL: client.user.displayAvatarURL() });
+				embed.setTitle(`Halo ${member.user.username},`).setDescription(`Kamu telah diban dari ${member.guild.name} dengan alasan telah diban dari Server Global dengan alasan __${gban.reason}__\n\nUntuk mengajukan banding atas ban yang kamu terima, kamu dapat menghubungi kami melalui server berikut ini:\nhttps://bit.ly/SkyDiscordBanReview`);
+				await member.send({ embeds: [embed] }).catch(err => console.error(err.message));
+
+				const data = { id: member.user.id, category: 'ban', reason: `Global: ${gban.reason}`, mod: client.user.id };
+				log.create(data).then(async () => {
+					await member.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason: `Global: ${gban.reason}` }).then(async () => {
+						await member.guild.channels.fetch('1016585021651427370').then(async ch => {
+							embed.setTitle('Global Auto Ban Log').setDescription(`${member.user.tag} has been banned.`).setFields({ name: 'Moderator', value: `${client.user.tag}`, inline: false }, { name: 'Reason', value: `Global: ${gban.reason}`, inline: false });
+							// eslint-disable-next-line max-nested-callbacks
+							await ch.send({ embeds: [embed] }).catch(err => console.error(err.message));
 						}).catch(err => console.error(err.message));
-					}
-				});
-			}).catch(err => console.error(err.message));
-		}).catch(err => console.error(err.message));
+					}).catch(err => console.error(err.message));
+				}).catch(err => console.error(err.message));
+			}
+		});
 
 		if (!banned) {
 			const embed = new EmbedBuilder()
@@ -856,7 +857,11 @@ client.on(Events.GuildBanAdd, async (ban) => {
 		const idGuild = await client.guilds.fetch('1016585021651427370').catch(err => console.error(err.message));
 		let actionStatus = false;
 		const dmStatus = false;
-		await idGuild.bans.create(ban.user.id, { reason: ban.reason }).then(async () => {
+		const idMember = await idGuild.members.fetch(ban.user.id).catch(err => console.error(err.message));
+
+		if (idMember) {
+			await idMember.ban({ deleteMessageSeconds: 7 * 24 * 60 * 60, reason: ban.reason }).catch(err => console.error(err.message));
+
 			actionStatus = true;
 
 			const logChannel = await idGuild.channels.fetch('1016585021651427370').catch(err => console.error(err.message));
@@ -890,7 +895,7 @@ client.on(Events.GuildBanAdd, async (ban) => {
 
 			// Save the log data to the database
 			await log.create(logData).catch(err => console.error(err.message));
-		}).catch(err => console.error(err.message));
+		}
 	}
 });
 

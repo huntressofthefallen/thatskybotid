@@ -48,7 +48,7 @@ module.exports = async (client) => {
 	client.on(Events.GuildMemberRemove, async (member) => {
 		if (member.guild.id == '1009644872065613864') {
 			// Get the audit logs for member kicks
-			const auditLogs = await member.guild.fetchAuditLogs({ limit: 1 });
+			const auditLogs = await member.guild.fetchAuditLogs({ type: AuditLogEvent.MemberKick, limit: 1 });
 			const latestLog = auditLogs.entries.first();
 
 			if (latestLog.target.id === member.id) {

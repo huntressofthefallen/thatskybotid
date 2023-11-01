@@ -1,27 +1,7 @@
 const embedBuilder = require('./scripts/builders/embed');
 const { log } = require('./database/lib/s');
-
-async function fetchAllBans(guild) {
-	const bans = new Map();
-	let startId = null;
-	let hasMore = true;
-
-	do {
-		const batch = await guild.bans.fetch({ limit: 1000, after: startId }).catch(err => console.error(err.message));
-
-		if (!batch.size) {
-			hasMore = false;
-		}
-		else {
-			batch.forEach((ban) => {
-				bans.set(ban.user.id, ban);
-				startId = ban.user.id;
-			});
-		}
-	} while (hasMore);
-
-	return bans;
-}
+const { AuditLogEvent } = require('discord.js');
+const fetchAllBans = require('./scripts/src/fetchAllBans');
 
 /**
  * This function checks for pending members and banned users in the guild.
@@ -60,6 +40,7 @@ module.exports = async (client) => {
 
 	// Check Banned Users
 	const globalGuild = await client.guilds.fetch('575762611111592007').catch(err => console.error(err.message));
+	const idGuildBans = await fetchAllBans(idGuild).catch(err => console.error(err.message));
 	const globalGuildBans = await fetchAllBans(globalGuild).catch(err => console.error(err.message));
 
 	idMembers.forEach(async member => {
@@ -122,5 +103,62 @@ module.exports = async (client) => {
 				}, 5000 * numban);
 			}
 		});
+	});
+
+	let unbanned = [];
+
+	idGuildBans.forEach(async idGuildBan => {
+		let stillBanned = false;
+		globalGuildBans.forEach(async guildBan => {
+			if (idGuildBan.user.id === guildBan.user.id) {
+				stillBanned = true;
+			}
+		});
+
+		if (!stillBanned) {
+			const auditLogs = await globalGuild.fetchAuditLogs({ type: AuditLogEvent.MemberBanRemove, user: idGuildBan.user, limit: 1 }).catch(err => console.error(err.message));
+			const latestLog = auditLogs.entries.first();
+
+			unbanned.push({ id: idGuildBan.user.id, reason: `Global Unban: ${latestLog?.reason}`, tag: idGuildBan.user.username, user: idGuildBan.user })
+		}
+	});
+
+	unbanned.forEach(async (unban, i) => {
+		setTimeout(async () => {
+			await idGuild.bans.remove(unban.id, { reason: unban.reason }).catch(err => console.error(err));
+
+			const logEmbed = embedBuilder({
+				client,
+				user: unban.user,
+				title: 'Global Auto Unban Log',
+				description: `${unban.tag} has been unbanned.`,
+				fields: [
+					{ name: 'Moderator', value: `${client.user.tag}`, inline: false },
+					{ name: 'Reason', value: `${unban.reason}`, inline: false },
+				],
+			});
+
+			const logChannel = await idGuild.channels.fetch('1016585021651427370').catch(err => console.error(err.message));
+			await logChannel.send({ embeds: [logEmbed] }).catch(err => console.error(err.message));
+
+			// Create the log data object
+			const logData = {
+				guildId: idGuild.id,
+				guildName: idGuild.name,
+				channelId: '575762611111592007',
+				channelName: 'Sky: Children of the Light',
+				userId: unban.id,
+				userTag: unban.tag,
+				modId: client.user.id,
+				modTag: client.user.tag,
+				action: 'unban',
+				reason: guildBan.reason,
+				dmStatus,
+				actionStatus,
+			};
+
+			// Save the log data to the database
+			await log.create(logData).catch(err => console.error(err.message));
+		}, 5000 * i);
 	});
 };
