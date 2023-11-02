@@ -115,6 +115,16 @@ const commands = [
 	new SlashCommandBuilder()
 		.setName('unwarn')
 		.setDescription('Removes a warning from a member.')
+		.addStringOption(option => option
+			.setName('_id')
+			.setDescription('Database _id of the warning.')
+			.setRequired(true),
+		)
+		.addStringOption(option => option
+			.setName('reason')
+			.setDescription('Reason for the warning.')
+			.setRequired(true),
+		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
 	new SlashCommandBuilder()
 		.setName('mute')
@@ -188,6 +198,11 @@ const commands = [
 	new SlashCommandBuilder()
 		.setName('infraction')
 		.setDescription('See a member moderation infraction log.')
+		.addUserOption(option => option
+			.setName('user')
+			.setDescription('User to see the infraction log.')
+			.setRequired(true),
+		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
 	new SlashCommandBuilder()
 		.setName('escalate')

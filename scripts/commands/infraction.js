@@ -1,4 +1,5 @@
 const embedBuilder = require('../builders/embed');
+const getLatestLogs = require('../src/getLatestLogs');
 
 /**
  * Handles the interaction to display the infraction log.
@@ -7,11 +8,14 @@ const embedBuilder = require('../builders/embed');
  * @param {boolean} options.hidden - Whether the reply should be ephemeral or not.
  */
 module.exports = async (interaction, options) => {
+	const userId = interaction.options.getUser('user').id;
+	const description = await getLatestLogs(userId);
+
 	const embed = embedBuilder({
 		client: interaction.client,
 		user: interaction.user,
 		title: 'Infraction Log',
-		description: '[Click Here to See the Infraction Logs](https://community.funplus.com/)',
+		description,
 	});
 
 	await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err.message));

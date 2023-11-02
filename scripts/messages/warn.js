@@ -1,5 +1,6 @@
 const embedBuilder = require('../builders/embed');
 const modActionRowBuilder = require('../builders/modActionRow');
+const userActionRowBuilder = require('../builders/userActionRow');
 const { log } = require('../../database/lib/s');
 
 /**
@@ -39,7 +40,7 @@ module.exports = async (message, client, reason) => {
 	});
 
 	// Send the DM to the User
-	await user.send({ embeds: [dmEmbed] }).then(() => {
+	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => {
 		dmStatus = true;
 		actionStatus = true;
 	}).catch(err => console.error(err.message));

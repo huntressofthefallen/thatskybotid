@@ -1,5 +1,6 @@
 const embedBuilder = require('../builders/embed');
 const modActionRowBuilder = require('../builders/modActionRow');
+const userActionRowBuilder = require('../builders/userActionRow');
 const { log } = require('../../database/lib/s');
 const conversionFactors = {
 	'1h': 60 * 60 * 1000,
@@ -57,7 +58,7 @@ module.exports = async (interaction, options) => {
 	});
 
 	// Send the DM to the User
-	await member.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
+	await member.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
 
 	// Check if the member is moderatable and perform the timeout action
 	if (member.moderatable) {

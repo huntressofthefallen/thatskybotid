@@ -22,11 +22,6 @@ module.exports = () => {
 				value: 'log',
 			},
 			{
-				label: 'Remove Warning',
-				description: 'Remove a warning from this member.',
-				value: 'unwarn',
-			},
-			{
 				label: 'Warning',
 				description: 'Gives warning to this member.',
 				value: 'warn',

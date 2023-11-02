@@ -1,5 +1,6 @@
 const embedBuilder = require('../builders/embed');
 const modActionRowBuilder = require('../builders/modActionRow');
+const userActionRowBuilder = require('../builders/userActionRow');
 
 /**
  * Perform the next escalation step based on the user's recent infractions.
@@ -25,5 +26,5 @@ module.exports = async (interaction, options) => {
 	const logChannel = await interaction.guild.channels.fetch('1016584787634442300').catch(err => console.error(err.message));
 	await logChannel.send({ embeds: [embed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
 
-	await interaction.editReply({ content: 'Laporan darimu telah kami terima! Karena alasan privasi dan keamanan kami tidak dapat memberitahu tindakan yang telah kami lakukan atas laporan darimu. Terima kasih atas dukungan dan laporan darimu untuk menjadikan server Sky: Anak-Anak Cahaya lebih baik!', ephemeral: options.hidden }).catch(err => console.error(err.message));
+	await interaction.editReply({ content: 'Laporan darimu telah kami terima! Karena alasan privasi dan keamanan kami tidak dapat memberitahu tindakan yang telah kami lakukan atas laporan darimu. Terima kasih atas dukungan dan laporan darimu untuk menjadikan server Sky: Anak-Anak Cahaya lebih baik!', components: userActionRowBuilder(), ephemeral: options.hidden }).catch(err => console.error(err.message));
 };

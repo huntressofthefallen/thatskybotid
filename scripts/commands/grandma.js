@@ -1,4 +1,5 @@
 const embedBuilder = require('../builders/embed');
+const userActionRowBuilder = require('../builders/userActionRow');
 
 /**
  * Convert the input date to a date object in the specified timezone.
@@ -37,7 +38,7 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
 			description: `Nenek telah hadir di Meja Milik Leluhur di Lahan Terbuka di Hutan Tersembunyi! Kunjungi jamuan makan dari Nenek sebelum <t:${tsdateend.getTime() / 1000}:t>. (<t:${tsdateend.getTime() / 1000}:R>)`,
 		});
 
-		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err.message));
+		await interaction.editReply({ embeds: [embed], components: userActionRowBuilder(), ephemeral: options.hidden }).catch(err => console.error(err.message));
 		return;
 	}
 	else {
@@ -48,7 +49,7 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
 			description: `Jamuan makan dari nenek selanjutnya akan hadir pada <t:${tsdatestart.getTime() / 1000}:t> hingga <t:${tsdateend.getTime() / 1000}:t>. (<t:${tsdatestart.getTime() / 1000}:R>)\n\nCatat waktunya dan jangan sampai ketinggalan makanan lezat dari nenek!`,
 		});
 
-		await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err.message));
+		await interaction.editReply({ embeds: [embed], components: userActionRowBuilder(), ephemeral: options.hidden }).catch(err => console.error(err.message));
 		return;
 	}
 }

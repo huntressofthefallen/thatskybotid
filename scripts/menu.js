@@ -12,9 +12,6 @@ module.exports = async (interaction) => {
 		else if (interaction.values[0] == 'warn') {
 			require('./menus/warn')(interaction, options);
 		}
-		else if (interaction.values[0] == 'unwarn') {
-			require('./menus/unwarn')(interaction, options);
-		}
 		else if (interaction.values[0] == 'unmute') {
 			require('./menus/unmute')(interaction, options);
 		}

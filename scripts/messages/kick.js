@@ -1,5 +1,6 @@
 const embedBuilder = require('../builders/embed');
 const modActionRowBuilder = require('../builders/modActionRow');
+const userActionRowBuilder = require('../builders/userActionRow');
 const { log } = require('../../database/lib/s');
 
 /**
@@ -40,7 +41,7 @@ module.exports = async (message, client, reason) => {
 	});
 
 	// Send the DM to the User
-	await user.send({ embeds: [dmEmbed] }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
+	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
 
 	// Check if the member is kickable and perform the kick action
 	if (member.kickable) {

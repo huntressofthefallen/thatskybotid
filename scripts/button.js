@@ -34,6 +34,10 @@ module.exports = async (interaction) => {
 		require('./buttons/safe')(interaction);
 		return;
 	}
+	else if (interaction.customId == 'translate') {
+		require('./buttons/translate')(interaction);
+		return;
+	}
 	else {
 		await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 		return;
