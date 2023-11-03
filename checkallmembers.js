@@ -105,7 +105,7 @@ module.exports = async (client) => {
 		});
 	});
 
-	let unbanned = [];
+	const unbanned = [];
 
 	idGuildBans.forEach(async idGuildBan => {
 		let stillBanned = false;
@@ -119,7 +119,7 @@ module.exports = async (client) => {
 			const auditLogs = await globalGuild.fetchAuditLogs({ type: AuditLogEvent.MemberBanRemove, user: idGuildBan.user, limit: 1 }).catch(err => console.error(err.message));
 			const latestLog = auditLogs.entries.first();
 
-			unbanned.push({ id: idGuildBan.user.id, reason: `Global Unban: ${latestLog?.reason}`, tag: idGuildBan.user.username, user: idGuildBan.user })
+			unbanned.push({ id: idGuildBan.user.id, reason: `Global Unban: ${latestLog?.reason}`, tag: idGuildBan.user.username, user: idGuildBan.user });
 		}
 	});
 
@@ -152,9 +152,9 @@ module.exports = async (client) => {
 				modId: client.user.id,
 				modTag: client.user.tag,
 				action: 'unban',
-				reason: guildBan.reason,
-				dmStatus,
-				actionStatus,
+				reason: unban.reason,
+				dmStatus: false,
+				actionStatus: true,
 			};
 
 			// Save the log data to the database

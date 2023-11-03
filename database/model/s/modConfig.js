@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const modConfigSchema = require('../../schema/s/modConfig');
 
