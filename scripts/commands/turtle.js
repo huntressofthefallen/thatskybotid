@@ -2,16 +2,31 @@ const embedBuilder = require('../builders/embed');
 const userActionRowBuilder = require('../builders/userActionRow');
 
 /**
- * Convert the input date to a date object in the specified timezone.
- * @param {string} date - The input date string.
- * @param {string} timeZone - The desired timezone.
- * @returns {Date} - The date object in the specified timezone.
+ * Determines whether the given date falls within the Pacific Daylight Time (PDT) period.
+ *
+ * @param {Date|number} date The date to check.
+ * @returns {boolean} True if the date is within PDT, false otherwise.
  */
-const getDateInTimeZone = (date, timeZone) => {
-	const utcDate = new Date(date);
-	const tzDate = new Date(utcDate.toLocaleString('en-US', { timeZone }));
-	const offset = utcDate.getTime() - tzDate.getTime();
-	return new Date(utcDate.getTime() + offset);
+const isPDT = (date) => {
+	const d = new Date(date);
+	const year = d.getFullYear();
+	const month = d.getMonth();
+	const day = d.getDate();
+
+	// Get the start and end dates of the DST period for the given year
+	const dstStartDate = new Date(year, 2, 14);
+	const dstEndDate = new Date(year, 10, 1);
+
+	// Check if the date falls within the DST period
+	if (
+		(date >= dstStartDate && date <= dstEndDate) ||
+		(month === 3 && day >= 8 && year > 2024)
+	) {
+		return true;
+	}
+	else {
+		return false;
+	}
 };
 
 /**
@@ -61,11 +76,11 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
  * @param {boolean} options.hidden - Whether the reply should be ephemeral or not.
  */
 module.exports = async (interaction, options) => {
-	const tsstartdate = 'March 28, 2023 00:50:00';
-	const tsenddate = 'March 28, 2023 01:00:00';
+	const tsstartdate = `March 28, 2023 00:50:00 ${isPDT(new Date()) ? 'PDT' : 'PST'}`;
+	const tsenddate = `March 28, 2023 01:00:00 ${isPDT(new Date()) ? 'PDT' : 'PST'}`;
 
-	const tsstart = getDateInTimeZone(tsstartdate, 'America/Los_Angeles');
-	const tsend = getDateInTimeZone(tsenddate, 'America/Los_Angeles');
+	const tsstart = new Date(tsstartdate);
+	const tsend = new Date(tsenddate);
 
 	looping(interaction, options, tsstart, tsend);
 };

@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
  * @property {boolean} automod - Whether the automod is enabled for this word.
  * @property {number} category - The category number of the censored word.
  */
-
 const censoredWordsSchema = new mongoose.Schema({
 	word: String,
 	automod: Boolean,
@@ -20,7 +19,6 @@ const censoredWordsSchema = new mongoose.Schema({
  * @property {boolean} dm - Whether to send a direct message to the user.
  * @property {number} count - The count of occurrences before the action is triggered.
  */
-
 const autoModConfigSchema = new mongoose.Schema({
 	action: String,
 	length: String,
@@ -39,7 +37,6 @@ const autoModConfigSchema = new mongoose.Schema({
  * @property {string[]} whitelistChannels - The list of whitelisted channel IDs.
  * @property {string[]} whitelistRoles - The list of whitelisted role IDs.
  */
-
 module.exports = new mongoose.Schema({
 	guildId: String,
 	autoModeration: Boolean,

@@ -1,13 +1,42 @@
 const embedBuilder = require('../builders/embed');
 const userActionRowBuilder = require('../builders/userActionRow');
 
-const getDateInTimeZone = (date, timeZone) => {
-	const utcDate = new Date(date);
-	const tzDate = new Date(utcDate.toLocaleString('en-US', { timeZone }));
-	const offset = utcDate.getTime() - tzDate.getTime();
-	return new Date(utcDate.getTime() + offset);
+/**
+ * Determines whether the given date falls within the Pacific Daylight Time (PDT) period.
+ *
+ * @param {Date|number} date The date to check.
+ * @returns {boolean} True if the date is within PDT, false otherwise.
+ */
+const isPDT = (date) => {
+	const d = new Date(date);
+	const year = d.getFullYear();
+	const month = d.getMonth();
+	const day = d.getDate();
+
+	// Get the start and end dates of the DST period for the given year
+	const dstStartDate = new Date(year, 2, 14);
+	const dstEndDate = new Date(year, 10, 1);
+
+	// Check if the date falls within the DST period
+	if (
+		(date >= dstStartDate && date <= dstEndDate) ||
+		(month === 3 && day >= 8 && year > 2024)
+	) {
+		return true;
+	}
+	else {
+		return false;
+	}
 };
 
+/**
+ * Recursively updates the interaction reply with the event status based on the current time.
+ * @param {import('discord.js').ChatInputCommandInteraction} interaction - The interaction that triggered the command.
+ * @param {Object} options - The options for the interaction reply.
+ * @param {boolean} options.hidden - Whether the reply should be ephemeral or not.
+ * @param {Date} tsdatestart - The start date of the event.
+ * @param {Date} tsdateend - The end date of the event.
+ */
 async function looping(interaction, options, tsdatestart, tsdateend) {
 	const today = new Date().getTime();
 
@@ -40,12 +69,18 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
 	}
 }
 
+/**
+ * Handles the interaction to display information about the "Geyser yang Tercemar" event.
+ * @param {import('discord.js').ChatInputCommandInteraction} interaction - The interaction that triggered the command.
+ * @param {Object} options - The options for the interaction reply.
+ * @param {boolean} options.hidden - Whether the reply should be ephemeral or not.
+ */
 module.exports = async (interaction, options) => {
-	const tsstartdate = 'March 30, 2023 00:00:00';
-	const tsenddate = 'April 2, 2023 23:59:59';
+	const tsstartdate = `March 30, 2023 00:00:00 ${isPDT(new Date()) ? 'PDT' : 'PST'}`;
+	const tsenddate = `April 2, 2023 23:59:59 ${isPDT(new Date()) ? 'PDT' : 'PST'}`;
 
-	const tsstart = getDateInTimeZone(tsstartdate, 'America/Los_Angeles');
-	const tsend = getDateInTimeZone(tsenddate, 'America/Los_Angeles');
+	const tsstart = new Date(tsstartdate);
+	const tsend = new Date(tsenddate);
 
 	looping(interaction, options, tsstart, tsend);
 };
