@@ -1048,7 +1048,8 @@ client.once(Events.ClientReady, async () => {
 	require('./deploy-commands');
 	require('./idbadwords')();
 	require('./checkallmembers')(client);
-	require('./botLogs')(client);
+	// require('./botLogs')(client);
+
 	client.user.setPresence({
 		status: 'online',
 		activities: [{
