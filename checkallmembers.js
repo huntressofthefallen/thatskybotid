@@ -12,26 +12,25 @@ const fetchAllBans = require('./scripts/src/fetchAllBans');
  */
 module.exports = async (client) => {
 	const idGuild = await client.guilds.fetch('1009644872065613864').catch(err => console.error(err.message));
-	const childOfLightRole = await idGuild.roles.fetch('1009736934765113415').catch(err => console.error(err.message));
 	const idMembers = await idGuild.members.fetch().catch(err => console.error(err.message));
-	let num = 0;
-	let count = 0;
 
-	// Iterate through members
+	const childOfLightRole = await idGuild.roles.fetch('1009736934765113415').catch(err => console.error(err.message));
+	let num = 0;
+
+	//* Iterate through members
 	idMembers.forEach(async member => {
-		count++;
 		if (!member.pending && !member.roles.cache.has('1009736934765113415')) {
 			num++;
+			console.log(`S${num}. [add] => ${member.user.tag} - Pending: ${member.pending} - hasRole: ${member.roles.cache.has('1009736934765113415')}`);
 			setTimeout(async () => {
 				await member.roles.add(childOfLightRole).catch(err => console.error(err.message));
-				console.log(`S${count}. [add] => ${member.user.tag} - Pending: ${member.pending} - hasRole: ${member.roles.cache.has('1009736934765113415')}`);
 			}, 1000 * num);
 		}
 		else if (member.pending && member.roles.cache.has('1009736934765113415')) {
 			num++;
+			console.log(`S${num}. [remove] => ${member.user.tag} - Pending: ${member.pending} - hasRole: ${member.roles.cache.has('1009736934765113415')}`);
 			setTimeout(async () => {
 				await member.roles.remove(childOfLightRole).catch(err => console.error(err.message));
-				console.log(`S${count}. [remove] => ${member.user.tag} - Pending: ${member.pending} - hasRole: ${member.roles.cache.has('1009736934765113415')}`);
 			}, 1000 * num);
 		}
 	});

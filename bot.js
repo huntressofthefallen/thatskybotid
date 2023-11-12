@@ -45,6 +45,7 @@ const { log } = require('./database/lib/s');
 
 const embedBuilder = require('./scripts/builders/embed');
 const modActionRow = require('./scripts/builders/modActionRow');
+const userActionRowBuilder = require('./scripts/builders/userActionRow');
 const checkEscalation = require('./scripts/src/checkEscalation');
 
 const banMessage = require('./scripts/messages/ban');
@@ -800,7 +801,7 @@ client.on(Events.GuildMemberAdd, async (member) => {
 					.setTimestamp()
 					.setFooter({ text: 'Global Server Auto Ban', iconURL: client.user.displayAvatarURL() });
 				embed.setTitle(`Halo ${member.user.username},`).setDescription(`Kamu telah diban dari ${member.guild.name} dengan alasan telah diban dari Server Global dengan alasan __${gban.reason}__\n\nUntuk mengajukan banding atas ban yang kamu terima, kamu dapat menghubungi kami melalui server berikut ini:\nhttps://bit.ly/SkyDiscordBanReview`);
-				await member.send({ embeds: [embed] }).catch(err => console.error(err.message));
+				await member.send({ embeds: [embed], components: userActionRowBuilder() }).catch(err => console.error(err.message));
 
 				const data = { id: member.user.id, category: 'ban', reason: `Global: ${gban.reason}`, mod: client.user.id };
 				log.create(data).then(async () => {
@@ -825,7 +826,7 @@ client.on(Events.GuildMemberAdd, async (member) => {
 				.setTimestamp()
 				.setFooter({ text: member.id, iconURL: member.displayAvatarURL() });
 
-			await member.send({ embeds: [embed] }).catch(err => console.error(err.message));
+			await member.send({ embeds: [embed], components: userActionRowBuilder() }).catch(err => console.error(err.message));
 		}
 	}
 });
@@ -978,7 +979,7 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 						else if (ch.id == '1010418851000885351' || ch.id == '1010443793578852402') {
 							const limited = rateLimiter.take(u.id);
 							if (limited) {
-								await user.send({ content: 'Pengambilan peran gagal, mohon dicoba lagi.' }).catch(err => console.error(err.message));
+								await user.send({ content: 'Pengambilan peran gagal, mohon dicoba lagi.', components: userActionRowBuilder() }).catch(err => console.error(err.message));
 							}
 							else {
 								roleReaction.forEach(async (r) => {
