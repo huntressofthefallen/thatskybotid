@@ -219,13 +219,19 @@ const commands = [
 			.setRequired(true),
 		),
 	new ContextMenuCommandBuilder()
-		.setName('Inappropriate Message')
+		.setName('(MOD) Inappropriate Message')
 		.setType(ApplicationCommandType.Message)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
 	new ContextMenuCommandBuilder()
-		.setName('Spam Message')
+		.setName('(MOD) Spam Message')
 		.setType(ApplicationCommandType.Message)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+	new ContextMenuCommandBuilder()
+		.setName('Translate to English')
+		.setType(ApplicationCommandType.Message),
+	new ContextMenuCommandBuilder()
+		.setName('Translate to Indonesian')
+		.setType(ApplicationCommandType.Message),
 	new ContextMenuCommandBuilder()
 		.setName('Report Message')
 		.setType(ApplicationCommandType.Message),
