@@ -1,5 +1,7 @@
+const translate = require('../translate');
 module.exports = async (interaction) => {
-	const args = interaction.options.getString('search').toLowerCase().trim().split(/ +/);
+	const keywords = await translate(interaction.options.getString('search'), { to: 'en' });
+	const args = keywords.toLowerCase().trim().split(/ +/);
 
 	let searchparam = '';
 	args.forEach((arg, i) => {
@@ -10,5 +12,6 @@ module.exports = async (interaction) => {
 			searchparam = arg;
 		}
 	});
-	require('../src/wikifetch')(interaction, searchparam).catch(err => console.error(err));
+
+	require('../src/wikiFetch')(interaction, searchparam);
 };
