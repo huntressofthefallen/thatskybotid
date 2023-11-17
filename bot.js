@@ -737,7 +737,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			require('./scripts/commands')(interaction);
 		}
 		else if (interaction.isStringSelectMenu()) {
-			require('./scripts/menu')(interaction);
+			if (interaction.customId != 'wiki') {
+				require('./scripts/menu')(interaction);
+			}
 		}
 		else if (interaction.isButton()) {
 			require('./scripts/button')(interaction);

@@ -58,6 +58,9 @@ module.exports = async (interaction) => {
 		require('./commands/ts')(interaction, options);
 		return;
 	}
+	else if (interaction.commandName == 'wiki') {
+		require('./commands/wiki')(interaction);
+	}
 	else if (interaction.commandName == 'geyser') {
 		require('./commands/geyser')(interaction, options);
 		return;

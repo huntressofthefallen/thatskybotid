@@ -28,6 +28,7 @@
     "googleapis": "^128.0.0",
     "languagedetect": "^2.0.0",
     "mongoose": "^8.0.1",
+    "node-fetch-commonjs": "^3.3.2",
     "openai": "^4.19.0"
   },
   "devDependencies": {

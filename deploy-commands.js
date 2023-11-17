@@ -20,6 +20,16 @@ const commands = [
 		.setDescription('Lihat Jadwal Turtle Selanjutnya.')
 		.setDefaultMemberPermissions(PermissionFlagsBits.UseApplicationCommands),
 	new SlashCommandBuilder()
+		.setName('wiki')
+		.setDescription('Sky: Children of the Light Wiki Search Command')
+		.setDMPermission(true)
+		.addStringOption(option =>
+			option
+				.setName('search')
+				.setDescription('Search with prefix/keywords of a Wiki Page')
+				.setRequired(true),
+		),
+	new SlashCommandBuilder()
 		.setName('censorship')
 		.setDescription('Words censorship from thatskybotid.')
 		.setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
