@@ -76,7 +76,7 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
  * @param {boolean} options.hidden - Whether the reply should be ephemeral or not.
  */
 module.exports = async (interaction, options) => {
-	const tsstartdate = `March 28, 2023 00:00:00 ${isPDT(new Date()) ? 'PDT' : 'PST'}`;
+	const tsstartdate = `March 28, 2023 00:05:00 ${isPDT(new Date()) ? 'PDT' : 'PST'}`;
 	const tsenddate = `March 28, 2023 00:15:00 ${isPDT(new Date()) ? 'PDT' : 'PST'}`;
 
 	const tsstart = new Date(tsstartdate);
