@@ -710,8 +710,20 @@ client.on(Events.MessageDelete, async (message) => {
 
 client.on(Events.InteractionCreate, async (interaction) => {
 	if (interaction.user.partial) {
-		await interaction.user.fetch();
+		await interaction.user.fetch().catch(err => console.error(err.message));
 	}
+	if (interaction.member) {
+		if (interaction.member.partial) {
+			await interaction.member.fetch().catch(err => console.error(err.message));
+		}
+	}
+	if (interaction.message) {
+		await interaction.message.fetch().catch(err => console.error(err.message));
+	}
+	if (interaction.channel.partial) {
+		await interaction.channel.fetch().catch(err => console.error(err.message));
+	}
+
 	if (interaction.channel.type == ChannelType.DM) {
 		if (interaction.isButton()) {
 			require('./scripts/button')(interaction);
@@ -721,11 +733,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		}
 	}
 	else if (interaction.guild.id == '1009644872065613864') {
-		if (interaction.member) {
-			if (interaction.member.partial) {
-				await interaction.member.fetch();
-			}
-		}
 		if (interaction.isChatInputCommand()) {
 			require('./scripts/commands')(interaction);
 		}
@@ -746,17 +753,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		}
 	}
 	else if (interaction.guild.id == '902592618444255252') {
-		if (interaction.channel.partial) {
-			await interaction.channel.fetch();
-		}
-		if (interaction.user.partial) {
-			await interaction.user.fetch();
-		}
-		if (interaction.member) {
-			if (interaction.member.partial) {
-				await interaction.member.fetch();
-			}
-		}
 		if (interaction.isButton()) {
 			if (interaction.customId == 'banappeal' || interaction.customId == 'replych' || interaction.customId == 'done') {
 				require('./scripts/button')(interaction);
@@ -764,6 +760,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			else {
 				await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 			}
+		}
+		else if (interaction.isContextMenuCommand()) {
+			require('./scripts/contextmenu')(interaction);
 		}
 		else if (interaction.isModalSubmit()) {
 			if (interaction.customId == 'banappeal' || interaction.customId == 'replych') {

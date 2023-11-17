@@ -241,10 +241,25 @@ const commands = [
 ]
 	.map(command => command.toJSON());
 
+
+// const globalCommands = [
+// 	new ContextMenuCommandBuilder()
+// 		.setName('Translate to English')
+// 		.setType(ApplicationCommandType.Message),
+// 	new ContextMenuCommandBuilder()
+// 		.setName('Translate to Indonesian')
+// 		.setType(ApplicationCommandType.Message),
+// ]
+// 	.map(command => command.toJSON());
+
 const rest = new REST({ version: '10' }).setToken(S_TOKEN);
 
 rest.put(Routes.applicationGuildCommands(S_CLIENTID, '1009644872065613864'), { body: commands })
-	.then((data) => console.log(`Successfully registered ${data.length} application commands.`))
+	.then((data) => console.log(`Successfully registered ${data.length} application commands in Indonesian Server.`))
 	.catch(err => console.error(err.message));
+
+// rest.put(Routes.applicationGuildCommands(S_CLIENTID, '575762611111592007'), { body: globalCommands })
+// 	.then((data) => console.log(`Successfully registered ${data.length} application commands in Global Server.`))
+// 	.catch(err => console.error(err.message));
 
 // Credits: Huntress of the Fallen
