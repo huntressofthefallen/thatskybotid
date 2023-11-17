@@ -2,7 +2,7 @@ const embedBuilder = require('../builders/embed');
 const translate = require('../translate');
 
 module.exports = async (interaction) => {
-	const message = interaction.message;
+	const message = await interaction.message.fetch().catch(err => console.error(err.message));
 	let embedTitle, embedDescription, content, embed;
 
 	if (message.embeds[0]) {
