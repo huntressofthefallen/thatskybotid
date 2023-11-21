@@ -73,6 +73,10 @@ module.exports = async (interaction) => {
 		require('./commands/turtle')(interaction, options);
 		return;
 	}
+	else if (interaction.commandName == 'concert') {
+		require('./commands/concert')(interaction, options);
+		return;
+	}
 	else {
 		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
 		return;

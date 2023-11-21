@@ -20,6 +20,10 @@ const commands = [
 		.setDescription('Lihat Jadwal Turtle Selanjutnya.')
 		.setDefaultMemberPermissions(PermissionFlagsBits.UseApplicationCommands),
 	new SlashCommandBuilder()
+		.setName('concert')
+		.setDescription('Lihat Jadwal Konser AURORA Selanjutnya.')
+		.setDefaultMemberPermissions(PermissionFlagsBits.UseApplicationCommands),
+	new SlashCommandBuilder()
 		.setName('wiki')
 		.setDescription('Sky: Children of the Light Wiki Search Command')
 		.setDMPermission(true)
