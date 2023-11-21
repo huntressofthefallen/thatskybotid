@@ -3,6 +3,7 @@ const modActionRowBuilder = require('../builders/modActionRow');
 const userActionRowBuilder = require('../builders/userActionRow');
 const { log } = require('../../database/lib/s');
 const conversionFactors = {
+	'30m': 30 * 60 * 1000,
 	'1h': 60 * 60 * 1000,
 	'8h': 8 * 60 * 60 * 1000,
 	'1d': 24 * 60 * 60 * 1000,
