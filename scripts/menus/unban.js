@@ -1,6 +1,7 @@
 const embedBuilder = require('../builders/embed');
 const modActionRowBuilder = require('../builders/modActionRow');
 const { log } = require('../../database/lib/s');
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Unban a user
@@ -29,16 +30,16 @@ module.exports = async (interaction, options) => {
 		client: interaction.client,
 		user: member.user,
 		title: 'Unban Log',
-		description: `${member.user.tag} has been unbanned.`,
+		description: `${member.user.username} has been unbanned.`,
 		fields: [
 			{ name: 'Reason', value: reason, inline: false },
-			{ name: 'Moderator', value: interaction.user.tag, inline: false },
+			{ name: 'Moderator', value: interaction.user.username, inline: false },
 		],
 	});
 
 	// Perform the unban action
 	try {
-		await interaction.guild.bans.fetch(member.id).catch(err => console.error(err.message));
+		await interaction.guild.bans.fetch(member.id).catch(err => errorHandler(err));
 		await interaction.guild.bans.remove(member.id);
 		actionStatus = true;
 	}
@@ -47,12 +48,12 @@ module.exports = async (interaction, options) => {
 	}
 
 	// Send the log embed to the log channel
-	const logChannel = await interaction.guild.channels.fetch('1016585021651427370').catch(err => console.error(err.message));
-	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
+	const logChannel = await interaction.guild.channels.fetch('1016585021651427370').catch(err => errorHandler(err));
+	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => errorHandler(err));
 
 	// Edit the interaction reply with the log embed
-	await interaction.message.edit({ content: `${member.user.tag} has been unbanned.`, components: null }).catch(err => console.error(err.message));
-	await interaction.editReply({ content: `${member.user.tag} has been unbanned.`, ephemeral: options.hidden }).catch(err => console.error(err.message));
+	await interaction.message.edit({ content: `${member.user.username} has been unbanned.`, components: null }).catch(err => errorHandler(err));
+	await interaction.editReply({ content: `${member.user.username} has been unbanned.`, ephemeral: options.hidden }).catch(err => errorHandler(err));
 
 	// Create the log data object
 	const logData = {
@@ -61,16 +62,16 @@ module.exports = async (interaction, options) => {
 		channelId: interaction.channel.id,
 		channelName: interaction.channel.name,
 		userId: member.id,
-		userTag: member.user.tag,
+		userTag: member.user.username,
 		modId: interaction.user.id,
-		modTag: interaction.user.tag,
+		modTag: interaction.user.username,
 		action: 'unban',
 		reason,
 		actionStatus,
 	};
 
 	// Save the log data to the database
-	await log.create(logData).catch(err => console.error(err.message));
+	await log.create(logData).catch(err => errorHandler(err));
 };
 
 // Credits: Huntress of the Fallen

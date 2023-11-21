@@ -1,8 +1,9 @@
 const embedBuilder = require('../builders/embed');
 const translate = require('../translate');
+const errorHandler = require('../src/errorHandler');
 
 module.exports = async (interaction) => {
-	const message = await interaction.targetMessage.fetch().catch(err => console.error(err.message));
+	const message = await interaction.targetMessage.fetch().catch(err => errorHandler(err));
 	let embedTitle, embedDescription, content, embed;
 
 	if (message.embeds[0]) {
@@ -22,15 +23,15 @@ module.exports = async (interaction) => {
 	}
 
 	if (embed && content) {
-		await interaction.editReply({ content: content, embeds: [embed], ephemeral: true }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: content, embeds: [embed], ephemeral: true }).catch(err => errorHandler(err));
 	}
 	else if (content) {
-		await interaction.editReply({ content: content, ephemeral: true }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: content, ephemeral: true }).catch(err => errorHandler(err));
 	}
 	else if (embed) {
-		await interaction.editReply({ embeds: [embed], ephemeral: true }).catch(err => console.error(err.message));
+		await interaction.editReply({ embeds: [embed], ephemeral: true }).catch(err => errorHandler(err));
 	}
 	else {
-		await interaction.editReply({ content: 'Error 500 - The bot unable to translate this message.', ephemeral: true }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: 'Error 500 - The bot unable to translate this message.', ephemeral: true }).catch(err => errorHandler(err));
 	}
 };

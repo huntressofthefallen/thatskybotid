@@ -1,5 +1,6 @@
 const embedBuilder = require('../builders/embed');
 const getLatestLogs = require('../src/getLatestLogs');
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Handles the interaction to display the infraction log.
@@ -18,7 +19,7 @@ module.exports = async (interaction, options) => {
 		description,
 	});
 
-	await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => console.error(err.message));
+	await interaction.editReply({ embeds: [embed], ephemeral: options.hidden }).catch(err => errorHandler(err));
 };
 
 // Credits: Huntress of the Fallen

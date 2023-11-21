@@ -1,5 +1,6 @@
 const embedBuilder = require('../builders/embed');
 const userActionRowBuilder = require('../builders/userActionRow');
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Determines whether the given date falls within the Pacific Daylight Time (PDT) period.
@@ -53,7 +54,7 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
 			description: `Konser AURORA sedang berlangsung! Kunjungi area konser dengan menggunakan Sayap AURORA sebelum <t:${tsdateend.getTime() / 1000}:t>. (<t:${tsdateend.getTime() / 1000}:R>)`,
 		});
 
-		await interaction.editReply({ embeds: [embed], components: userActionRowBuilder(), ephemeral: options.hidden }).catch(err => console.error(err.message));
+		await interaction.editReply({ embeds: [embed], components: userActionRowBuilder(), ephemeral: options.hidden }).catch(err => errorHandler(err));
 		return;
 	}
 	else {
@@ -64,7 +65,7 @@ async function looping(interaction, options, tsdatestart, tsdateend) {
 			description: `Konser AURORA selanjutnya akan hadir pada <t:${tsdatestart.getTime() / 1000}:t> hingga <t:${tsdateend.getTime() / 1000}:t>. (<t:${tsdatestart.getTime() / 1000}:R>)\n\nCatat waktunya dan jangan sampai ketinggalan untuk mengikuti kembali keindahan konser AURORA!\n*Catatan: Kamu harus menggunakan Sayap AURORA untuk dapat pergi ke area konser AURORA.*`,
 		});
 
-		await interaction.editReply({ embeds: [embed], components: userActionRowBuilder(), ephemeral: options.hidden }).catch(err => console.error(err.message));
+		await interaction.editReply({ embeds: [embed], components: userActionRowBuilder(), ephemeral: options.hidden }).catch(err => errorHandler(err));
 		return;
 	}
 }

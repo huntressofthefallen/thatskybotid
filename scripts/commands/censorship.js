@@ -2,6 +2,7 @@ const updateCensoredWords = require('../src/updateCensoredWords');
 const updateWhitelistWords = require('../src/updateWhitelistWords');
 const deleteCensoredWords = require('../src/deleteCensoredWords');
 const deleteWhitelistWords = require('../src/deleteWhitelistWords');
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Handles censorship word actions, including adding new words, editing existing words, removing words, and whitelisting.
@@ -16,7 +17,7 @@ module.exports = async (interaction, options) => {
 	const args = word.trim().split(/ +/);
 
 	if (args[1]) {
-		await interaction.editReply({ content: `Error 403 - ${word} should be only 1 word.`, ephemeral: options.hidden }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: `Error 403 - ${word} should be only 1 word.`, ephemeral: options.hidden }).catch(err => errorHandler(err));
 		return;
 	}
 
@@ -35,7 +36,7 @@ module.exports = async (interaction, options) => {
 				? `${word} - has been successfully updated in the Manual Mod Database.`
 				: 'Error 404 - Command not found.';
 
-		await interaction.editReply({ content: response, ephemeral: options.hidden }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: response, ephemeral: options.hidden }).catch(err => errorHandler(err));
 	}
 	else if (subcommand === 'remove') {
 		const category = interaction.options.getString('category');
@@ -50,14 +51,14 @@ module.exports = async (interaction, options) => {
 			? `${word} - has been successfully deleted in the Whitelist Database.`
 			: `${word} - has been successfully deleted in the Censorship Database.`;
 
-		await interaction.editReply({ content: response, ephemeral: options.hidden }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: response, ephemeral: options.hidden }).catch(err => errorHandler(err));
 	}
 	else if (subcommand === 'whitelist') {
 		await updateWhitelistWords(interaction.guildId, [word]);
-		await interaction.editReply({ content: `${word} - has been successfully updated in the Whitelist Database.`, ephemeral: options.hidden }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: `${word} - has been successfully updated in the Whitelist Database.`, ephemeral: options.hidden }).catch(err => errorHandler(err));
 	}
 	else {
-		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => errorHandler(err));
 	}
 };
 

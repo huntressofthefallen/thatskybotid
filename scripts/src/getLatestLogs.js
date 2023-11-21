@@ -1,8 +1,9 @@
 const { log } = require('../../database/lib/s');
+const errorHandler = require('./errorHandler');
 
 // Function to get the latest logs and format them into a string
 module.exports = async (userId) => {
-	const logs = await log.find({ userId }).sort({ updatedAt: -1 }).limit(10).catch(err => console.error(err.message));
+	const logs = await log.find({ userId }).sort({ updatedAt: -1 }).limit(10).catch(err => errorHandler(err));
 
 	if (logs.length === 0) {
 		return 'No moderation logs found.';

@@ -11,6 +11,7 @@ const conversionFactors = {
 	'3d': 3 * 24 * 60 * 60 * 1000,
 	'7d': 7 * 24 * 60 * 60 * 1000,
 };
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Handles the interaction to mute a user.
@@ -22,15 +23,15 @@ module.exports = async (interaction, options) => {
 	// Fetch the user and member objects from the interaction
 	let user, member, reason, length;
 	if (interaction.isChatInputCommand()) {
-		user = await interaction.options.getUser('user').fetch().catch(err => console.error(err.message));
-		member = await interaction.options.getMember('user').fetch().catch(err => console.error(err.message));
+		user = await interaction.options.getUser('user').fetch().catch(err => errorHandler(err));
+		member = await interaction.options.getMember('user').fetch().catch(err => errorHandler(err));
 		reason = interaction.options.getString('reason');
 		length = interaction.options.getString('length') || options.duration;
 	}
 	else if (interaction.isMessageContextMenuCommand()) {
-		await interaction.targetMessage.fetch().catch(err => console.error(err.message));
-		user = await interaction.targetMessage.author.fetch().catch(err => console.error(err.message));
-		member = await interaction.targetMessage.member.fetch().catch(err => console.error(err.message));
+		await interaction.targetMessage.fetch().catch(err => errorHandler(err));
+		user = await interaction.targetMessage.author.fetch().catch(err => errorHandler(err));
+		member = await interaction.targetMessage.member.fetch().catch(err => errorHandler(err));
 		reason = options.reason;
 		length = options.duration;
 	}
@@ -42,26 +43,26 @@ module.exports = async (interaction, options) => {
 	// Create the embed to be sent to the user via DM
 	const dmEmbed = embedBuilder({
 		client: interaction.client,
-		user: user,
+		user,
 		title: `Halo ${user.username},`,
-		description: `Kamu telah dimute dari ${interaction.guild.name} dengan alasan ${interaction.options.getString('reason')}\n\nKami mengutamakan keamanan dan kenyamanan para pemain, mohon membaca kembali peraturan di server discord kami sebelum bergabung kembali bersama para pemain lainnya.`,
+		description: `Kamu telah dimute dari ${interaction.guild.name} dengan alasan ${reason}\n\nKami mengutamakan keamanan dan kenyamanan para pemain, mohon membaca kembali peraturan di server discord kami sebelum bergabung kembali bersama para pemain lainnya.`,
 	});
 
 	// Create the embed to be sent to the log channel
 	const logEmbed = embedBuilder({
 		client: interaction.client,
-		user: user,
+		user,
 		title: 'Mute Log',
-		description: `${user.tag} has been muted.`,
+		description: `${user.username} has been muted.`,
 		fields: [
 			{ name: 'Reason', value: reason, inline: false },
-			{ name: 'Moderator', value: interaction.user.tag, inline: false },
+			{ name: 'Moderator', value: interaction.user.username, inline: false },
 			{ name: 'Mute Length', value: length, inline: false },
 		],
 	});
 
 	// Send the DM to the User
-	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
+	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => errorHandler(err));
 
 	// Try to perform the timeout action
 	try {
@@ -73,11 +74,11 @@ module.exports = async (interaction, options) => {
 	}
 
 	// Send the log embed to the log channel
-	const logChannel = await interaction.guild.channels.fetch('1016584981147045979').catch(err => console.error(err.message));
-	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
+	const logChannel = await interaction.guild.channels.fetch('1016584981147045979').catch(err => errorHandler(err));
+	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => errorHandler(err));
 
 	// Edit the interaction reply with the log embed
-	await interaction.editReply({ embeds: [logEmbed], ephemeral: options.hidden }).catch(err => console.error(err.message));
+	await interaction.editReply({ embeds: [logEmbed], ephemeral: options.hidden }).catch(err => errorHandler(err));
 
 	// Create the log data object
 	const logData = {
@@ -86,9 +87,9 @@ module.exports = async (interaction, options) => {
 		channelId: interaction.channel.id,
 		channelName: interaction.channel.name,
 		userId: user.id,
-		userTag: user.tag,
+		userTag: user.username,
 		modId: interaction.user.id,
-		modTag: interaction.user.tag,
+		modTag: interaction.user.username,
 		action: 'mute',
 		reason,
 		length,
@@ -97,7 +98,7 @@ module.exports = async (interaction, options) => {
 	};
 
 	// Save the log data to the database
-	await log.create(logData).catch(err => console.error(err.message));
+	await log.create(logData).catch(err => errorHandler(err));
 };
 
 // Credits: Huntress of the Fallen

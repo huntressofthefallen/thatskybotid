@@ -1,11 +1,12 @@
 const { ApplicationCommandType } = require('discord.js');
+const errorHandler = require('./src/errorHandler');
 
 module.exports = async (interaction) => {
 	const options = { hidden: true };
 	if (interaction.channel.id == '1030082965448962128') {
 		options.hidden = false;
 	}
-	await interaction.deferReply({ ephemeral: options.hidden }).catch(err => console.error(err.message));
+	await interaction.deferReply({ ephemeral: options.hidden }).catch(err => errorHandler(err));
 
 	if (interaction.commandType == ApplicationCommandType.Message) {
 		if (interaction.commandName == '(MOD) Inappropriate Message') {
@@ -24,7 +25,7 @@ module.exports = async (interaction) => {
 			require('./contextmenus/translateIndonesian')(interaction);
 		}
 		else {
-			await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
+			await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => errorHandler(err));
 		}
 	}
 	else if (interaction.commandType == ApplicationCommandType.User) {
@@ -32,10 +33,10 @@ module.exports = async (interaction) => {
 			require('./contextmenus/reportuser')(interaction, options);
 		}
 		else {
-			await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
+			await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => errorHandler(err));
 		}
 	}
 	else {
-		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => errorHandler(err));
 	}
 };

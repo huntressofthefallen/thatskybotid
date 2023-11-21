@@ -1,3 +1,5 @@
+const errorHandler = require('./src/errorHandler');
+
 module.exports = async (interaction) => {
 	if (interaction.customId == 'livefeed') {
 		require('./buttons/livefeed')(interaction);
@@ -39,7 +41,7 @@ module.exports = async (interaction) => {
 		return;
 	}
 	else {
-		await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
+		await interaction.reply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => errorHandler(err));
 		return;
 	}
 };

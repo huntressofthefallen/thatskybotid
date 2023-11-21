@@ -2,6 +2,7 @@ const embedBuilder = require('../builders/embed');
 const modActionRowBuilder = require('../builders/modActionRow');
 const userActionRowBuilder = require('../builders/userActionRow');
 const { log } = require('../../database/lib/s');
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Handles the interaction to display the infraction log.
@@ -17,7 +18,7 @@ module.exports = async (interaction, options) => {
 		client: interaction.client,
 		user: interaction.user,
 		title: 'Unwarn Log',
-		description: `${interaction.user.tag} has been unwarned. ${_id} has been removed. Reason: ${reason}`,
+		description: `${interaction.user.username} has been unwarned. ${_id} has been removed. Reason: ${reason}`,
 	});
 
 	// Delete the log data on the database
@@ -31,7 +32,7 @@ module.exports = async (interaction, options) => {
 		// Create the embed to be sent to the user via DM
 		const dmEmbed = embedBuilder({
 			client: interaction.client,
-			user: user,
+			user,
 			title: `Halo ${user.username},`,
 			description: `Peringatan untukmu dari server ${interaction.guild.name} telah dihapuskan dengan alasan **__${reason}__**\n\nPerlu diingat bahwa kami mengutamakan keamanan dan kenyamanan para pemain, mohon membaca kembali peraturan di server discord kami sebelum bergabung kembali bersama para pemain lainnya.`,
 		});
@@ -45,7 +46,7 @@ module.exports = async (interaction, options) => {
 		await interaction.editReply({ embeds: [logEmbed], ephemeral: options.hidden });
 	}
 	catch (err) {
-		await interaction.editReply({ content: err.message, ephemeral: options.hidden }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: err.message, ephemeral: options.hidden }).catch(err => errorHandler(err));
 		console.error(err.message);
 	}
 

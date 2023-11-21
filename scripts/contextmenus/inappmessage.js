@@ -3,6 +3,7 @@ const ban = require('../commands/ban');
 const warning = require('../commands/warn');
 const kick = require('../commands/kick');
 const mute = require('../commands/mute');
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Convert milliseconds to a time string with 'd', 'h', or 'm' units.
@@ -69,7 +70,7 @@ module.exports = async (interaction, options) => {
 	}
 
 	if (interaction.targetMessage.deletable) {
-		await interaction.targetMessage.delete().catch(err => console.error(err.message));
+		await interaction.targetMessage.delete().catch(err => errorHandler(err));
 	}
 };
 

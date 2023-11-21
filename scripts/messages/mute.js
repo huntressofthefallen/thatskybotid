@@ -11,6 +11,7 @@ const conversionFactors = {
 	'3d': 3 * 24 * 60 * 60 * 1000,
 	'7d': 7 * 24 * 60 * 60 * 1000,
 };
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Sends a mute message to a user, mute the user, logs the mute, and saves the log data to the database.
@@ -40,7 +41,7 @@ module.exports = async (message, client, reason, length) => {
 		client,
 		user,
 		title: 'Mute Log',
-		description: `${user.tag} has been muted.`,
+		description: `${user.username} has been muted.`,
 		fields: [
 			{ name: 'Reason', value: reason, inline: false },
 			{ name: 'Moderator', value: 'thatskybotid', inline: false },
@@ -51,7 +52,7 @@ module.exports = async (message, client, reason, length) => {
 	});
 
 	// Send the DM to the User
-	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
+	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => errorHandler(err));
 
 	// Try to perform the timeout action
 	try {
@@ -64,8 +65,8 @@ module.exports = async (message, client, reason, length) => {
 	}
 
 	// Send the log embed to the log channel
-	const logChannel = await message.guild.channels.fetch('1016584981147045979').catch(err => console.error(err.message));
-	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
+	const logChannel = await message.guild.channels.fetch('1016584981147045979').catch(err => errorHandler(err));
+	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => errorHandler(err));
 
 	const attachmentUrls = [];
 	if (message.attachments) {
@@ -81,9 +82,9 @@ module.exports = async (message, client, reason, length) => {
 		channelId: message.channel.id,
 		channelName: message.channel.name,
 		userId: user.id,
-		userTag: user.tag,
+		userTag: user.username,
 		modId: client.user.id,
-		modTag: client.user.tag,
+		modTag: client.user.username,
 		action: 'mute',
 		reason,
 		dmStatus,
@@ -93,7 +94,7 @@ module.exports = async (message, client, reason, length) => {
 	};
 
 	// Save the log data to the database
-	await log.create(logData).catch(err => console.error(err.message));
+	await log.create(logData).catch(err => errorHandler(err));
 };
 
 // Credits: Huntress of the Fallen

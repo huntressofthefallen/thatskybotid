@@ -2,6 +2,7 @@ const embedBuilder = require('../builders/embed');
 const modActionRowBuilder = require('../builders/modActionRow');
 const userActionRowBuilder = require('../builders/userActionRow');
 const { log } = require('../../database/lib/s');
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Sends a warning message to a user, logs the warning, and saves the log data to the database.
@@ -30,7 +31,7 @@ module.exports = async (message, client, reason) => {
 		client,
 		user,
 		title: 'Warning Log',
-		description: `${user.tag} has been warned.`,
+		description: `${user.username} has been warned.`,
 		fields: [
 			{ name: 'Reason', value: reason, inline: false },
 			{ name: 'Moderator', value: 'thatskybotid', inline: false },
@@ -43,11 +44,11 @@ module.exports = async (message, client, reason) => {
 	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => {
 		dmStatus = true;
 		actionStatus = true;
-	}).catch(err => console.error(err.message));
+	}).catch(err => errorHandler(err));
 
 	// Send the log embed to the log channel
-	const logChannel = await message.guild.channels.fetch('1016584900444430417').catch(err => console.error(err.message));
-	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => console.error(err.message));
+	const logChannel = await message.guild.channels.fetch('1016584900444430417').catch(err => errorHandler(err));
+	await logChannel.send({ embeds: [logEmbed], components: modActionRowBuilder() }).catch(err => errorHandler(err));
 
 	const attachmentUrls = [];
 	if (message.attachments) {
@@ -63,9 +64,9 @@ module.exports = async (message, client, reason) => {
 		channelId: message.channel.id,
 		channelName: message.channel.name,
 		userId: user.id,
-		userTag: user.tag,
+		userTag: user.username,
 		modId: client.user.id,
-		modTag: client.user.tag,
+		modTag: client.user.username,
 		action: 'warning',
 		reason,
 		dmStatus,
@@ -75,7 +76,7 @@ module.exports = async (message, client, reason) => {
 	};
 
 	// Save the log data to the database
-	await log.create(logData).catch(err => console.error(err.message));
+	await log.create(logData).catch(err => errorHandler(err));
 };
 
 // Credits: Huntress of the Fallen

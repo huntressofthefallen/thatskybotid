@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { REST, SlashCommandBuilder, ContextMenuCommandBuilder, ApplicationCommandType, Routes, PermissionFlagsBits } = require('discord.js');
 const { S_CLIENTID, S_TOKEN } = process.env;
+const errorHandler = require('./scripts/src/errorHandler');
 
 const commands = [
 	new SlashCommandBuilder()
@@ -270,10 +271,10 @@ const rest = new REST({ version: '10' }).setToken(S_TOKEN);
 
 rest.put(Routes.applicationGuildCommands(S_CLIENTID, '1009644872065613864'), { body: commands })
 	.then((data) => console.log(`Successfully registered ${data.length} application commands in Indonesian Server.`))
-	.catch(err => console.error(err.message));
+	.catch(err => errorHandler(err));
 
 // rest.put(Routes.applicationGuildCommands(S_CLIENTID, '575762611111592007'), { body: globalCommands })
 // 	.then((data) => console.log(`Successfully registered ${data.length} application commands in Global Server.`))
-// 	.catch(err => console.error(err.message));
+// 	.catch(err => errorHandler(err));
 
 // Credits: Huntress of the Fallen

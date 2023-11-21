@@ -1,5 +1,7 @@
+const errorHandler = require('./src/errorHandler');
+
 module.exports = async (interaction) => {
-	await interaction.deferReply({ ephemeral: true }).catch(err => console.error(err.message));
+	await interaction.deferReply({ ephemeral: true }).catch(err => errorHandler(err));
 	if (interaction.customId == 'livefeed') {
 		require('./modals/livefeed')(interaction);
 	}
@@ -24,7 +26,7 @@ module.exports = async (interaction) => {
 		return;
 	}
 	else {
-		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: 'Error 404 - Command not found.', ephemeral: true }).catch(err => errorHandler(err));
 		return;
 	}
 };

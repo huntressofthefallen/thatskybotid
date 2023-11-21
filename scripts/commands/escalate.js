@@ -3,6 +3,7 @@ const ban = require('./ban');
 const warning = require('./warn');
 const kick = require('./kick');
 const mute = require('./mute');
+const errorHandler = require('../src/errorHandler');
 
 /**
  * Perform the next escalation step based on the user's recent infractions.
@@ -17,7 +18,7 @@ module.exports = async (interaction, options) => {
 
 	if (!escalation) {
 		await warning(interaction, options);
-		await interaction.editReply({ content: 'An error occurred while processing the escalation step.', ephemeral: true }).catch(err => console.error(err.message));
+		await interaction.editReply({ content: 'An error occurred while processing the escalation step.', ephemeral: true }).catch(err => errorHandler(err));
 		return;
 	}
 

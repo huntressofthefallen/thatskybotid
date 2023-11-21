@@ -1,4 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const errorHandler = require('../src/errorHandler');
 
 module.exports = async (interaction) => {
 	const title = interaction.fields.getTextInputValue('title');
@@ -23,7 +24,7 @@ module.exports = async (interaction) => {
 		.setTitle(title)
 		.setDescription(desc)
 		.addFields(
-			{ name: 'Author', value: `${interaction.user.tag}`, inline: false },
+			{ name: 'Author', value: `${interaction.user.username}`, inline: false },
 		)
 		.setAuthor({ name: 'thatskybotid', url: 'https://bit.ly/m/thatskygameid', iconURL: interaction.client.user.displayAvatarURL() })
 		.setThumbnail('https://img2.storyblok.com/fit-in/0x300/filters:format(webp)/f/108104/368x415/436d2e239c/sky-logo-white.png')
@@ -35,9 +36,9 @@ module.exports = async (interaction) => {
 
 	await interaction.client.channels.fetch(args[0]).then(async ch => {
 		await ch.messages.fetch(args[1]).then(async m => {
-			await m.reply({ embeds: [embed], components: [replyact] }).catch(err => console.error(err.message));
-			await interaction.message.edit({ content: 'Kamu telah membalas pesan ini, mohon tunggu balasan dari kami.', components: [] }).catch(err => console.error(err.message));
-			await interaction.editReply({ content: 'Pesan terkirim, terima kasih telah membalas pesan kami. Mohon tunggu balasan dari kami selanjutnya.', ephemeral: true }).catch(err => console.error(err.message));
-		}).catch(err => console.error(err.message));
-	}).catch(err => console.error(err.message));
+			await m.reply({ embeds: [embed], components: [replyact] }).catch(err => errorHandler(err));
+			await interaction.message.edit({ content: 'Kamu telah membalas pesan ini, mohon tunggu balasan dari kami.', components: [] }).catch(err => errorHandler(err));
+			await interaction.editReply({ content: 'Pesan terkirim, terima kasih telah membalas pesan kami. Mohon tunggu balasan dari kami selanjutnya.', ephemeral: true }).catch(err => errorHandler(err));
+		}).catch(err => errorHandler(err));
+	}).catch(err => errorHandler(err));
 };
