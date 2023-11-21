@@ -255,12 +255,12 @@ client.on(Events.MessageCreate, async (message) => {
 					const globalGuildInvites = await globalGuild.invites.fetch().catch(err => console.error(err.message));
 					let thisGuildInvite = false;
 					const htMessage = message.content.toLowerCase().replace(/\s/g, '');
-					idGuildInvites.forEach(guildInvite => {
+					idGuildInvites?.forEach(guildInvite => {
 						if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
 							thisGuildInvite = true;
 						}
 					});
-					globalGuildInvites.forEach(guildInvite => {
+					globalGuildInvites?.forEach(guildInvite => {
 						if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
 							thisGuildInvite = true;
 						}
@@ -538,10 +538,18 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 					}
 				});
 
-				const guildInvites = await newMessage.guild.invites.fetch().catch(err => console.error(err.message));
+				const idGuild = await client.guilds.fetch('1009644872065613864').catch(err => console.error(err.message));
+				const globalGuild = await client.guilds.fetch('575762611111592007').catch(err => console.error(err.message));
+				const idGuildInvites = await idGuild.invites.fetch().catch(err => console.error(err.message));
+				const globalGuildInvites = await globalGuild.invites.fetch().catch(err => console.error(err.message));
 				let thisGuildInvite = false;
 				const htMessage = newMessage.content.toLowerCase().replace(/\s/g, '');
-				guildInvites.forEach(guildInvite => {
+				idGuildInvites?.forEach(guildInvite => {
+					if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
+						thisGuildInvite = true;
+					}
+				});
+				globalGuildInvites?.forEach(guildInvite => {
 					if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
 						thisGuildInvite = true;
 					}
