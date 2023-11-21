@@ -251,9 +251,9 @@ client.on(Events.MessageCreate, async (message) => {
 					});
 
 					const idGuild = await client.guilds.fetch('1009644872065613864').catch(err => errorHandler(err));
-					const globalGuild = await client.guilds.fetch('575762611111592007').catch(err => errorHandler(err));
+					// const globalGuild = await client.guilds.fetch('575762611111592007').catch(err => errorHandler(err));
 					const idGuildInvites = await idGuild.invites.fetch().catch(err => errorHandler(err));
-					const globalGuildInvites = await globalGuild.invites.fetch().catch(err => errorHandler(err));
+					// const globalGuildInvites = await globalGuild.invites.fetch().catch(err => errorHandler(err));
 					let thisGuildInvite = false;
 					const htMessage = message.content.toLowerCase().replace(/\s/g, '');
 					idGuildInvites?.forEach(guildInvite => {
@@ -261,11 +261,11 @@ client.on(Events.MessageCreate, async (message) => {
 							thisGuildInvite = true;
 						}
 					});
-					globalGuildInvites?.forEach(guildInvite => {
-						if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
-							thisGuildInvite = true;
-						}
-					});
+					// globalGuildInvites?.forEach(guildInvite => {
+					// 	if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
+					// 		thisGuildInvite = true;
+					// 	}
+					// });
 
 					if (htMessage.includes('discord.gg') || htMessage.includes('discord.com/invite')) {
 						if (!htMessage.includes('discord.gg/thatskygame') && !htMessage.includes('discord.com/invite/thatskygame') && !htMessage.includes('discord.gg/thatskygameid') && !htMessage.includes('discord.com/invite/thatskygameid') && !thisGuildInvite) {
@@ -540,9 +540,9 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 				});
 
 				const idGuild = await client.guilds.fetch('1009644872065613864').catch(err => errorHandler(err));
-				const globalGuild = await client.guilds.fetch('575762611111592007').catch(err => errorHandler(err));
+				// const globalGuild = await client.guilds.fetch('575762611111592007').catch(err => errorHandler(err));
 				const idGuildInvites = await idGuild.invites.fetch().catch(err => errorHandler(err));
-				const globalGuildInvites = await globalGuild.invites.fetch().catch(err => errorHandler(err));
+				// const globalGuildInvites = await globalGuild.invites.fetch().catch(err => errorHandler(err));
 				let thisGuildInvite = false;
 				const htMessage = newMessage.content.toLowerCase().replace(/\s/g, '');
 				idGuildInvites?.forEach(guildInvite => {
@@ -550,11 +550,11 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 						thisGuildInvite = true;
 					}
 				});
-				globalGuildInvites?.forEach(guildInvite => {
-					if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
-						thisGuildInvite = true;
-					}
-				});
+				// globalGuildInvites?.forEach(guildInvite => {
+				// 	if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
+				// 		thisGuildInvite = true;
+				// 	}
+				// });
 
 				if (htMessage.includes('hearttrade') || htMessage.includes('tradeheart') || htMessage.includes('tradehati')) {
 					severity = 2;
