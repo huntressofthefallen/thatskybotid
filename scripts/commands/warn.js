@@ -17,6 +17,7 @@ module.exports = async (interaction, options) => {
 		reason = interaction.options.getString('reason');
 	}
 	else if (interaction.isMessageContextMenuCommand()) {
+		await interaction.targetMessage.fetch().catch(err => console.error(err.message));
 		user = await interaction.targetMessage.author.fetch().catch(err => console.error(err.message));
 		reason = options.reason;
 	}
