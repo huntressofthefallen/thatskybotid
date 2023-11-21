@@ -28,8 +28,8 @@ module.exports = async (interaction, options) => {
 		length = interaction.options.getString('length') || options.duration;
 	}
 	else if (interaction.isMessageContextMenuCommand()) {
-		user = interaction.targetMessage.author;
-		member = interaction.targetMessage.member;
+		user = await interaction.targetMessage.author.fetch().catch(err => console.error(err.message));
+		member = await interaction.targetMessage.member.fetch().catch(err => console.error(err.message));
 		reason = options.reason;
 		length = options.duration;
 	}
