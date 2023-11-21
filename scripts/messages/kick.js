@@ -43,18 +43,14 @@ module.exports = async (message, client, reason) => {
 	// Send the DM to the User
 	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
 
-	// Check if the member is kickable and perform the kick action
-	if (member.kickable) {
-		try {
-			if (member.moderatable) {
-				await member.timeout(7 * 24 * 60 * 60 * 1000, `${reason}`).catch(err => console.error(err.message));
-			}
-			await member.kick({ reason: reason });
-			actionStatus = true;
-		}
-		catch (err) {
-			console.error(err.message);
-		}
+	// Try to perform the kick action
+	try {
+		await member.timeout(7 * 24 * 60 * 60 * 1000, `${reason}`).catch(err => console.error(err.message));
+		await member.kick({ reason: reason });
+		actionStatus = true;
+	}
+	catch (err) {
+		console.error(err.message);
 	}
 
 	// Send the log embed to the log channel

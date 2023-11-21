@@ -49,15 +49,13 @@ module.exports = async (interaction, options) => {
 	// Send the DM to the User
 	await member.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
 
-	// Check if the member is banable and perform the ban action
-	if (member.banable) {
-		try {
-			await member.ban({ deleteMessageSeconds: 7 * 24 * 60 * 60, reason });
-			actionStatus = true;
-		}
-		catch (err) {
-			console.error(err.message);
-		}
+	// Try to perform the ban action
+	try {
+		await member.ban({ deleteMessageSeconds: 7 * 24 * 60 * 60, reason });
+		actionStatus = true;
+	}
+	catch (err) {
+		console.error(err.message);
 	}
 
 	// Send the log embed to the log channel

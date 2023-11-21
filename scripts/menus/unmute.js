@@ -30,14 +30,12 @@ module.exports = async (interaction, options) => {
 		],
 	});
 
-	if (member.moderatable) {
-		try {
-			await member.timeout(null, `${reason}`);
-			actionStatus = true;
-		}
-		catch (err) {
-			console.error(err.message);
-		}
+	try {
+		await member.timeout(null, `${reason}`);
+		actionStatus = true;
+	}
+	catch (err) {
+		console.error(err.message);
 	}
 
 	// Send the log embed to the log channel

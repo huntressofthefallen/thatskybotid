@@ -53,16 +53,14 @@ module.exports = async (message, client, reason, length) => {
 	// Send the DM to the User
 	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
 
-	// Check if the member is moderatable and perform the timeout action
-	if (member.moderatable) {
-		try {
-			const timeoutMiliseconds = conversionFactors[length];
-			await member.timeout(timeoutMiliseconds, `${reason}`);
-			actionStatus = true;
-		}
-		catch (err) {
-			console.error(err.message);
-		}
+	// Try to perform the timeout action
+	try {
+		const timeoutMiliseconds = conversionFactors[length];
+		await member.timeout(timeoutMiliseconds, `${reason}`);
+		actionStatus = true;
+	}
+	catch (err) {
+		console.error(err.message);
 	}
 
 	// Send the log embed to the log channel

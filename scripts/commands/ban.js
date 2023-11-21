@@ -49,7 +49,7 @@ module.exports = async (interaction, options) => {
 	// Send the DM to the User
 	await user.send({ embeds: [dmEmbed], components: userActionRowBuilder() }).then(() => { dmStatus = true; }).catch(err => console.error(err.message));
 
-	// Check if the member is banable and perform the ban action
+	// Try to perform the ban action
 	try {
 		await member.ban({ deleteMessageSeconds: 7 * 24 * 60 * 60, reason: reason });
 		actionStatus = true;

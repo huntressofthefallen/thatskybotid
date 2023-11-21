@@ -27,15 +27,13 @@ module.exports = async (interaction, options) => {
 		],
 	});
 
-	// Check if the member is moderatable and perform the timeout action
-	if (member.moderatable) {
-		try {
-			await member.timeout(null, `${reason}`);
-			actionStatus = true;
-		}
-		catch (err) {
-			console.error(err.message);
-		}
+	// Try to perform the timeout action
+	try {
+		await member.timeout(null, `${reason}`);
+		actionStatus = true;
+	}
+	catch (err) {
+		console.error(err.message);
 	}
 
 	// Send the log embed to the log channel
