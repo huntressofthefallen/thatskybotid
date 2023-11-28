@@ -30,7 +30,7 @@ client.once(Events.ClientReady, async () => {
 	// require('./idbadwords');
 	// require('./mongodbrefresh');
 	// require('./modalMessage')(client);
-	require('./translateann')(client);
+	require('./runner/translateann')(client);
 	console.log('thatskybotid BOT is Ready!');
 });
 

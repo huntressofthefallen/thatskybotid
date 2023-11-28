@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { REST, SlashCommandBuilder, ContextMenuCommandBuilder, ApplicationCommandType, Routes, PermissionFlagsBits } = require('discord.js');
 const { S_CLIENTID, S_TOKEN } = process.env;
-const errorHandler = require('./scripts/src/errorHandler');
+const errorHandler = require('../src/errorHandler');
 
 const commands = [
 	new SlashCommandBuilder()

@@ -1,8 +1,8 @@
-const embedBuilder = require('./scripts/builders/embed');
-const { log } = require('./database/lib/s');
+const embedBuilder = require('../builders/embed');
+const { log } = require('../../database/lib/s');
 const { AuditLogEvent } = require('discord.js');
-const fetchAllBans = require('./scripts/src/fetchAllBans');
-const errorHandler = require('./scripts/src/errorHandler');
+const fetchAllBans = require('../src/fetchAllBans');
+const errorHandler = require('../src/errorHandler');
 
 /**
  * This function checks for pending members and banned users in the guild.

@@ -31,7 +31,7 @@ else {
 	automoddb = model('automod', automodSchema);
 }
 
-const censorship = require('./database/idbadwords.json');
+const censorship = require('../database/idbadwords.json');
 const am = [];
 const mm = [];
 const wh = [];

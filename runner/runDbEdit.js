@@ -1,4 +1,4 @@
-const LogsModel = require('./database/lib/s').log;
+const LogsModel = require('../database/lib/s').log;
 
 async function updateData() {
 	const logsData = await LogsModel.find({ userId: { $exists: true }, id: { $exists: true } });

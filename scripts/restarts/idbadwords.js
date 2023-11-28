@@ -1,7 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-const { modConfig } = require('./database/lib/s');
+const { modConfig } = require('../../database/lib/s');
 
 /**
  * Transforms a ServerSettingsSchema object into the desired format.

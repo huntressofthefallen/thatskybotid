@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
-const translate = require('./scripts/translate');
+const translate = require('../scripts/translate');
 
 module.exports = async (client) => {
 	// thatskygame global guild

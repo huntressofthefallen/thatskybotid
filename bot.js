@@ -1074,10 +1074,10 @@ client.on(Events.MessageReactionRemove, async (reaction, user) => {
 });
 
 client.once(Events.ClientReady, async () => {
-	require('./deploy-commands');
-	require('./idbadwords')();
-	require('./checkallmembers')(client);
-	// require('./botLogs')(client);
+	require('./scripts/restarts/deploy-commands');
+	require('./scripts/restarts/idbadwords')();
+	require('./scripts/restarts/checkallmembers')(client);
+	require('./scripts/restarts/message')(client);
 
 	client.user.setPresence({
 		status: 'online',
