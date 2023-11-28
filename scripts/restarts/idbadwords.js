@@ -36,7 +36,7 @@ const writeTransformedSettingsToFile = async () => {
 	try {
 		const data = await modConfig.findOne({ guildId: '1009644872065613864' });
 		const transformedSettings = transformServerSettings(data);
-		const filePath = path.join(__dirname, './database/idbadwords.json');
+		const filePath = path.join(__dirname, '../../database/idbadwords.json');
 		await fs.writeFile(filePath, JSON.stringify(transformedSettings, null, 2));
 	}
 	catch (err) {
