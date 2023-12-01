@@ -57,9 +57,9 @@ const muteMessage = require('./scripts/messages/mute');
 const translate = require('./scripts/translate');
 
 const fetchAllBans = require('./scripts/src/fetchAllBans');
+const checkCensoredWords = require('./scripts/src/checkCensoredWords');
 
 client.on(Events.MessageCreate, async (message) => {
-	const idbadwords = require('./database/idbadwords.json');
 	if (message.partial) {
 		await message.fetch().catch(err => errorHandler(err));
 	}
@@ -189,49 +189,7 @@ client.on(Events.MessageCreate, async (message) => {
 				}
 				else {
 					const args = message.content.toLowerCase().trim().replace(/4|@/gi, 'a').replace(/\$/gi, 's').replace(/1|!/gi, 'i').replace(/0/gi, 'o').replace(/3/gi, 'e').split(/\s+/gi);
-					const censorship = { count: 0, words: [] };
-
-					idbadwords.S.forEach(async (s) => {
-						args.forEach(async (a, i) => {
-							if (a.includes(s)) {
-								args.splice(i, 1);
-							}
-						});
-					});
-
-					idbadwords.P1.forEach(async (w) => {
-						args.forEach(async (a) => {
-							if (a.includes(w)) {
-								censorship.count++;
-								censorship.words.push({ word: w, det: a, cat: 1 });
-							}
-						});
-					});
-
-					idbadwords.P2.forEach(async (w) => {
-						args.forEach(async (a) => {
-							if (a.includes(w)) {
-								censorship.count++;
-								censorship.words.push({ word: w, det: a, cat: 2 });
-							}
-						});
-					});
-
-					censorship.words.forEach(async (fil1, j) => {
-						censorship.words.forEach(async (fil2, i) => {
-							if (fil1.cat <= fil2.cat && fil1.word == fil2.word && i != j) {
-								censorship.words.splice(i, 1);
-							}
-						});
-					});
-
-					idbadwords.S.forEach(async (s) => {
-						censorship.words.forEach(async (fill, i) => {
-							if (fill.det == s) {
-								censorship.words.splice(i, 1);
-							}
-						});
-					});
+					const censorship = await checkCensoredWords(args);
 
 					let mess;
 					let severity = 0;
@@ -399,7 +357,6 @@ client.on(Events.MessageCreate, async (message) => {
 });
 
 client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
-	const idbadwords = require('./database/idbadwords.json');
 	if (newMessage.partial) {
 		await newMessage.fetch().catch(err => errorHandler(err));
 	}
@@ -478,49 +435,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 				// }
 
 				const args = newMessage.content.toLowerCase().trim().replace(/4|@/gi, 'a').replace(/\$/gi, 's').replace(/1|!/gi, 'i').replace(/0/gi, 'o').replace(/3/gi, 'e').split(/\s+/gi);
-				const censorship = { count: 0, words: [] };
-
-				idbadwords.S.forEach(async (s) => {
-					args.forEach(async (a, i) => {
-						if (a.includes(s)) {
-							args.splice(i, 1);
-						}
-					});
-				});
-
-				idbadwords.P1.forEach(async (w) => {
-					args.forEach(async (a) => {
-						if (a.includes(w)) {
-							censorship.count++;
-							censorship.words.push({ word: w, det: a, cat: 1 });
-						}
-					});
-				});
-
-				idbadwords.P2.forEach(async (w) => {
-					args.forEach(async (a) => {
-						if (a.includes(w)) {
-							censorship.count++;
-							censorship.words.push({ word: w, cat: 2 });
-						}
-					});
-				});
-
-				censorship.words.forEach(async (fil1, j) => {
-					censorship.words.forEach(async (fil2, i) => {
-						if (fil1.cat <= fil2.cat && fil1.word == fil2.word && i != j) {
-							censorship.words.splice(i, 1);
-						}
-					});
-				});
-
-				idbadwords.S.forEach(async (s) => {
-					censorship.words.forEach(async (fill, i) => {
-						if (fill.det == s) {
-							censorship.words.splice(i, 1);
-						}
-					});
-				});
+				const censorship = await checkCensoredWords(args);
 
 				let mess;
 				let severity = 0;
@@ -1075,7 +990,7 @@ client.on(Events.MessageReactionRemove, async (reaction, user) => {
 
 client.once(Events.ClientReady, async () => {
 	require('./scripts/restarts/deploy-commands');
-	require('./scripts/restarts/idbadwords')();
+	// require('./scripts/restarts/idbadwords')();
 	require('./scripts/restarts/checkallmembers')(client);
 	require('./scripts/restarts/message')(client);
 
