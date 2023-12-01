@@ -25,7 +25,7 @@ module.exports = async (interaction, options) => {
 		const automod = interaction.options.getString('automod');
 		const censoredWord = {
 			word,
-			automod: automod === 'auto',
+			automod: automod === 'auto' ? true : false,
 			category: automod === 'auto' ? 1 : 2,
 		};
 		await updateCensoredWords(interaction.guild.id, [censoredWord]);

@@ -27,18 +27,10 @@ const client = new Client({
 	makeCache: Options.cacheEverything(),
 });
 client.cluster = new ClusterClient(client);
-// const { Configuration, OpenAIApi } = require('openai');
-// const configuration = new Configuration({
-// 	apiKey: process.env.OPENAI_API_KEY,
-// });
-// const openai = new OpenAIApi(configuration);
 
 const skiproleid = ['1009673144744816670', '1009732058555367475', '1009733483825995846'];
 
-const roleReaction = require('./database/roles.json');
-
 const { RateLimiter } = require('discord.js-rate-limiter');
-const rateLimiter = new RateLimiter(1, 500);
 const mentionSpamLimiter = new RateLimiter(4, 6 * 1000);
 const spamLimiter = new RateLimiter(5, 4 * 1000);
 const { log } = require('./database/lib/s');
@@ -94,49 +86,6 @@ client.on(Events.MessageCreate, async (message) => {
 				return;
 			}
 			else {
-				// if (message.content && message.content?.length > 0) {
-				// 	try {
-				// 		const moderationResponse = await openai.createModeration({
-				// 			input: message.content,
-				// 		});
-				// 		if (moderationResponse.data.results[0].flagged) {
-				// 			await client.channels.fetch('1116179227037929532').then(async (testChannel) => {
-				// 				const categoriesResult = moderationResponse.data.results[0].categories;
-				// 				const scoresResult = moderationResponse.data.results[0].category_scores;
-
-				// 				let categories = '';
-				// 				let scores = '';
-
-				// 				for (const key in categoriesResult) {
-				// 					categories += `- ${key}: \`${categoriesResult[key]}\`\n`;
-				// 				}
-
-				// 				for (const key in scoresResult) {
-				// 					scores += `- ${key}: \`${scoresResult[key]}\`\n`;
-				// 				}
-
-				// 				const moderationEmbed = embedBuilder({
-				// 					client,
-				// 					user: message.author,
-				// 					title: 'AI Moderation Results',
-				// 					description: message.content,
-				// 					fields: [
-				// 						{
-				// 							name: 'Categories', value: categories, inline: false,
-				// 						},
-				// 						{ name: 'Category Scores', value: scores, inline: false },
-				// 						{ name: 'Flagged', value: moderationResponse.data.results[0].flagged ? '🔴 Not Safe' : '🟢 Safe', inline: false },
-				// 					],
-				// 				});
-				// 				await testChannel.send({ content: message.url, embeds: [moderationEmbed] }).catch(err=>console.error(err.message));
-				// 			});
-				// 		}
-				// 	}
-				// 	catch (error) {
-				// 		console.error(error.message);
-				// 	}
-				// }
-
 				const spam = spamLimiter.take(message.author.id);
 
 				let mentionSpam;
@@ -209,9 +158,7 @@ client.on(Events.MessageCreate, async (message) => {
 					});
 
 					const idGuild = await client.guilds.fetch('1009644872065613864').catch(err => errorHandler(err));
-					// const globalGuild = await client.guilds.fetch('575762611111592007').catch(err => errorHandler(err));
 					const idGuildInvites = await idGuild.invites.fetch().catch(err => errorHandler(err));
-					// const globalGuildInvites = await globalGuild.invites.fetch().catch(err => errorHandler(err));
 					let thisGuildInvite = false;
 					const htMessage = message.content.toLowerCase().replace(/\s/g, '');
 					idGuildInvites?.forEach(guildInvite => {
@@ -219,11 +166,6 @@ client.on(Events.MessageCreate, async (message) => {
 							thisGuildInvite = true;
 						}
 					});
-					// globalGuildInvites?.forEach(guildInvite => {
-					// 	if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
-					// 		thisGuildInvite = true;
-					// 	}
-					// });
 
 					if (htMessage.includes('discord.gg') || htMessage.includes('discord.com/invite')) {
 						if (!htMessage.includes('discord.gg/thatskygame') && !htMessage.includes('discord.com/invite/thatskygame') && !htMessage.includes('discord.gg/thatskygameid') && !htMessage.includes('discord.com/invite/thatskygameid') && !thisGuildInvite) {
@@ -391,49 +333,6 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 				return;
 			}
 			else {
-				// if (newMessage.content && newMessage.content?.length > 0) {
-				// 	try {
-				// 		const moderationResponse = await openai.createModeration({
-				// 			input: newMessage.content,
-				// 		});
-				// 		if (moderationResponse.data.results[0].flagged) {
-				// 			await client.channels.fetch('1116179227037929532').then(async (testChannel) => {
-				// 				const categoriesResult = moderationResponse.data.results[0].categories;
-				// 				const scoresResult = moderationResponse.data.results[0].category_scores;
-
-				// 				let categories = '';
-				// 				let scores = '';
-
-				// 				for (const key in categoriesResult) {
-				// 					categories += `- ${key}: \`${categoriesResult[key]}\`\n`;
-				// 				}
-
-				// 				for (const key in scoresResult) {
-				// 					scores += `- ${key}: \`${scoresResult[key]}\`\n`;
-				// 				}
-
-				// 				const moderationEmbed = embedBuilder({
-				// 					client,
-				// 					user: newMessage.author,
-				// 					title: 'AI Moderation Results',
-				// 					description: newMessage.content,
-				// 					fields: [
-				// 						{
-				// 							name: 'Categories', value: categories, inline: false,
-				// 						},
-				// 						{ name: 'Category Scores', value: scores, inline: false },
-				// 						{ name: 'Flagged', value: moderationResponse.data.results[0].flagged ? '🔴 Not Safe' : '🟢 Safe', inline: false },
-				// 					],
-				// 				});
-				// 				await testChannel.send({ content: newMessage.url, embeds: [moderationEmbed] }).catch(err=>console.error(err.message));
-				// 			});
-				// 		}
-				// 	}
-				// 	catch (error) {
-				// 		console.error(error.message);
-				// 	}
-				// }
-
 				const args = newMessage.content.toLowerCase().trim().replace(/4|@/gi, 'a').replace(/\$/gi, 's').replace(/1|!/gi, 'i').replace(/0/gi, 'o').replace(/3/gi, 'e').split(/\s+/gi);
 				const censorship = await checkCensoredWords(args);
 
@@ -455,9 +354,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 				});
 
 				const idGuild = await client.guilds.fetch('1009644872065613864').catch(err => errorHandler(err));
-				// const globalGuild = await client.guilds.fetch('575762611111592007').catch(err => errorHandler(err));
 				const idGuildInvites = await idGuild.invites.fetch().catch(err => errorHandler(err));
-				// const globalGuildInvites = await globalGuild.invites.fetch().catch(err => errorHandler(err));
 				let thisGuildInvite = false;
 				const htMessage = newMessage.content.toLowerCase().replace(/\s/g, '');
 				idGuildInvites?.forEach(guildInvite => {
@@ -465,11 +362,6 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 						thisGuildInvite = true;
 					}
 				});
-				// globalGuildInvites?.forEach(guildInvite => {
-				// 	if (htMessage.includes(guildInvite.url) || htMessage.includes(guildInvite.code)) {
-				// 		thisGuildInvite = true;
-				// 	}
-				// });
 
 				if (htMessage.includes('hearttrade') || htMessage.includes('tradeheart') || htMessage.includes('tradehati')) {
 					severity = 2;
@@ -889,102 +781,6 @@ client.on(Events.GuildBanRemove, async (ban) => {
 			// Save the log data to the database
 			await log.create(logData).catch(err => errorHandler(err));
 		}).catch(err => errorHandler(err));
-	}
-});
-
-client.on(Events.MessageReactionAdd, async (reaction, user) => {
-	if (reaction.partial) {
-		await reaction.fetch().catch(err => errorHandler(err));
-	}
-	if (reaction.message) {
-		if (reaction.message.partial) {
-			await reaction.message.fetch().catch(err => errorHandler(err));
-			if (reaction.message.channel.partial) {
-				await reaction.message.channel.fetch().catch(err => errorHandler(err));
-			}
-		}
-	}
-	if (user.partial) {
-		await user.fetch().catch(err => errorHandler(err));
-	}
-	if (user.bot) {
-		return;
-	}
-
-	if (reaction.message.channel.type == ChannelType.GuildText) {
-		if (reaction.message.guild.id == '1009644872065613864') {
-			await reaction.message.fetch().then(async (message) => {
-				await message.channel.fetch().then(async (ch) => {
-					await user.fetch().then(async (u) => {
-						if (u.bot) {
-							return;
-						}
-						else if (ch.id == '1010418851000885351' || ch.id == '1010443793578852402') {
-							const limited = rateLimiter.take(u.id);
-							if (limited) {
-								await user.send({ content: 'Pengambilan peran gagal, mohon dicoba lagi.', components: userActionRowBuilder() }).catch(err => errorHandler(err));
-							}
-							else {
-								roleReaction.forEach(async (r) => {
-									if (reaction.emoji.toString() == r.RID) {
-										await message.guild.roles.fetch(r.ID).then(async (role) => {
-											await message.guild.members.fetch(u.id).then(async (member) => {
-												await member.roles.add(role).catch(err => errorHandler(err));
-											}).catch(err => errorHandler(err));
-										}).catch(err => errorHandler(err));
-									}
-								});
-							}
-						}
-					}).catch(err => errorHandler(err));
-				}).catch(err => errorHandler(err));
-			}).catch(err => errorHandler(err));
-		}
-	}
-});
-
-client.on(Events.MessageReactionRemove, async (reaction, user) => {
-	if (reaction.partial) {
-		await reaction.fetch().catch(err => errorHandler(err));
-	}
-	if (reaction.message) {
-		if (reaction.message.partial) {
-			await reaction.message.fetch().catch(err => errorHandler(err));
-			if (reaction.message.channel.partial) {
-				await reaction.message.channel.fetch().catch(err => errorHandler(err));
-			}
-		}
-	}
-	if (user.partial) {
-		await user.fetch().catch(err => errorHandler(err));
-	}
-	if (user.bot) {
-		return;
-	}
-
-	if (reaction.message.channel.type == ChannelType.GuildText) {
-		if (reaction.message.guild.id == '1009644872065613864') {
-			await reaction.message.fetch().then(async (message) => {
-				await message.channel.fetch().then(async (ch) => {
-					await user.fetch().then(async (u) => {
-						if (u.bot) {
-							return;
-						}
-						else if (ch.id == '1010418851000885351' || ch.id == '1010443793578852402') {
-							roleReaction.forEach(async (r) => {
-								if (reaction.emoji.toString() == r.RID) {
-									await message.guild.roles.fetch(r.ID).then(async (role) => {
-										await message.guild.members.fetch(u.id).then(async (member) => {
-											await member.roles.remove(role).catch(err => errorHandler(err));
-										}).catch(err => errorHandler(err));
-									}).catch(err => errorHandler(err));
-								}
-							});
-						}
-					}).catch(err => errorHandler(err));
-				}).catch(err => errorHandler(err));
-			}).catch(err => errorHandler(err));
-		}
 	}
 });
 
