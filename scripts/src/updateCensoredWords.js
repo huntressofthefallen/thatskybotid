@@ -1,4 +1,5 @@
 const { modConfig } = require('../../database/lib/s');
+const errorHandler = require('./errorHandler');
 
 /**
  * Update or add multiple censored words in the modConfig schema.
@@ -17,15 +18,12 @@ async function updateCensoredWords(guildId, censoredWords) {
 				$set: {
 					'censoredWords.$[element]': {
 						...censoredWord,
-						updatedAt: { $currentDate: true },
 					},
 				},
 				// Add the new element to the censoredWords array if the word doesn't exist
 				$setOnInsert: {
 					'censoredWords.$[element]': {
 						...censoredWord,
-						createdAt: { $currentDate: true },
-						updatedAt: { $currentDate: true },
 					},
 				},
 			},
@@ -37,7 +35,7 @@ async function updateCensoredWords(guildId, censoredWords) {
 				// Create a new element if the word doesn't exist
 				upsert: true,
 			},
-		);
+		).catch(err => errorHandler(err));
 	}
 }
 
