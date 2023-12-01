@@ -13,11 +13,13 @@ async function updateCensoredWords(guildId, censoredWords) {
 		await modConfig.updateOne(
 			{ guildId },
 			{
-				$set: {
-					'censoredWords.$[element].automod': censoredWord.automod,
-					'censoredWords.$[element].category': censoredWord.category,
+				$setOnInsert: {
+					'censoredWords.$[element]': {
+						word: censoredWord.word,
+						automod: censoredWord.automod,
+						category: censoredWord.category,
+					},
 				},
-				$addToSet: { censoredWords: censoredWord },
 			},
 			{
 				arrayFilters: [{ 'element.word': censoredWord.word }],
