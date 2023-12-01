@@ -10,7 +10,7 @@ const censoredWordsSchema = new mongoose.Schema({
 	word: String,
 	automod: Boolean,
 	category: Number,
-}, { timestamps: true });
+});
 
 /**
  * @typedef {Object} AutoModConfigSchema
@@ -25,7 +25,7 @@ const autoModConfigSchema = new mongoose.Schema({
 	dm: Boolean,
 	count: Number,
 	timeframe: String,
-}, { timestamps: true });
+});
 
 /**
  * @typedef {Object} ServerSettingsSchema
