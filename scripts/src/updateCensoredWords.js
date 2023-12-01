@@ -11,31 +11,38 @@ const errorHandler = require('./errorHandler');
  */
 async function updateCensoredWords(guildId, censoredWords) {
 	for (const censoredWord of censoredWords) {
-		await modConfig.updateOne(
-			{ guildId },
-			{
-				// Update the existing element in the censoredWords array where the word matches
-				$set: {
-					'censoredWords.$[element]': {
-						...censoredWord,
+		// Check if the word already exists
+		const existingWord = await modConfig.findOne(
+			{ guildId, 'censoredWords.word': censoredWord.word },
+		);
+
+		if (existingWord) {
+			// Update existing element
+			await modConfig.updateOne(
+				{ guildId, 'censoredWords.word': censoredWord.word },
+				{
+					$set: {
+						'censoredWords.$[element]': {
+							...censoredWord,
+						},
+					},
+					arrayFilters: [{ 'element.word': censoredWord.word }],
+				},
+			).catch(err => errorHandler(err));
+		}
+		else {
+			// Add new element
+			await modConfig.updateOne(
+				{ guildId },
+				{
+					$push: {
+						censoredWords: {
+							...censoredWord,
+						},
 					},
 				},
-				// Add the new element to the censoredWords array if the word doesn't exist
-				$setOnInsert: {
-					'censoredWords.$[element]': {
-						...censoredWord,
-					},
-				},
-			},
-			{
-				// Filter the array element
-				arrayFilters: [
-					{ 'element.word': censoredWord.word },
-				],
-				// Create a new element if the word doesn't exist
-				upsert: true,
-			},
-		).catch(err => errorHandler(err));
+			).catch(err => errorHandler(err));
+		}
 	}
 }
 
