@@ -1,6 +1,6 @@
 {
   "name": "thatskybotid",
-  "version": "1.7.11",
+  "version": "1.7.12",
   "description": "thatskygameid moderation bot",
   "main": "bot.js",
   "scripts": {
