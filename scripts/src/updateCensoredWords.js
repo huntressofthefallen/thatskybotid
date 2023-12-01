@@ -18,7 +18,7 @@ async function updateCensoredWords(guildId, censoredWords) {
 						word: censoredWord.word,
 						automod: censoredWord.automod,
 						category: censoredWord.category,
-						updatedAt: () => new Date(),
+						updatedAt: new Date(),
 					},
 				},
 			},
