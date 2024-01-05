@@ -7,8 +7,8 @@ module.exports = async (interaction) => {
 	let embedTitle, embedDescription, content, embed;
 
 	if (message.embeds[0]) {
-		embedTitle = await translate(message.embeds[0].title, { to: 'id' });
-		embedDescription = await translate(message.embeds[0].description, { to: 'id' });
+		embedTitle = await translate(message.embeds[0].title, { to: 'ID' });
+		embedDescription = await translate(message.embeds[0].description, { to: 'ID' });
 
 		embed = embedBuilder({
 			client: interaction.client,
@@ -19,7 +19,7 @@ module.exports = async (interaction) => {
 	}
 
 	if (message.content) {
-		content = await translate(message.content, { to: 'id' });
+		content = await translate(message.content, { to: 'ID' });
 	}
 
 	if (embed && content) {

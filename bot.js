@@ -251,7 +251,7 @@ client.on(Events.MessageCreate, async (message) => {
 		}
 	}
 	else if (message.channel.type == ChannelType.GuildAnnouncement && message.guild.id == '575762611111592007' && message.channel.id == '1077716001493356574') {
-		translate(message.content, { to: 'id' }).then(async res => {
+		translate(message.content, { to: 'ID' }).then(async res => {
 			const embed = new EmbedBuilder()
 				.setTitle('Quick Dev Updates')
 				.setURL(`https://discord.com/channels/575762611111592007/1077716001493356574/${message.id}`)
@@ -274,7 +274,7 @@ client.on(Events.MessageCreate, async (message) => {
 		}).catch(err => errorHandler(err));
 	}
 	else if (message.channel.type == ChannelType.GuildAnnouncement && message.guild.id == '575762611111592007' && message.channel.id == '628684058414678026') {
-		translate(message.content, { to: 'id' }).then(async res => {
+		translate(message.content, { to: 'ID' }).then(async res => {
 			const embed = new EmbedBuilder()
 				.setTitle('Known Issues')
 				.setURL(`https://discord.com/channels/575762611111592007/628684058414678026/${message.id}`)
@@ -444,7 +444,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 		}).catch(err => errorHandler(err));
 	}
 	else if (newMessage.channel.type == ChannelType.GuildAnnouncement && newMessage.guild.id == '575762611111592007' && newMessage.channel.id == '1077716001493356574') {
-		translate(newMessage.content, { to: 'id' }).then(async res => {
+		translate(newMessage.content, { to: 'ID' }).then(async res => {
 			const embed = new EmbedBuilder()
 				.setTitle('Quick Dev Updates')
 				.setURL(`https://discord.com/channels/575762611111592007/1077716001493356574/${newMessage.id}`)
@@ -473,7 +473,7 @@ client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
 		}).catch(err => errorHandler(err));
 	}
 	else if (newMessage.channel.type == ChannelType.GuildAnnouncement && newMessage.guild.id == '575762611111592007' && newMessage.channel.id == '628684058414678026') {
-		translate(newMessage.content, { to: 'id' }).then(async res => {
+		translate(newMessage.content, { to: 'ID' }).then(async res => {
 			const embed = new EmbedBuilder()
 				.setTitle('Known Issues')
 				.setURL(`https://discord.com/channels/575762611111592007/628684058414678026/${newMessage.id}`)

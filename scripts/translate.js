@@ -1,19 +1,21 @@
-const { Translate } = require('@google-cloud/translate').v2;
-const projectId = 'funplus-user-center';
-const keyFilename = './fp-platform-translation.json';
-const translate = new Translate({ projectId, keyFilename });
-const errorHandler = require('./src/errorHandler');
-
-async function translateText(text, targetLanguage) {
-	try {
-		const [translation] = await translate.translate(text, targetLanguage);
-		return translation;
-	}
-	catch (err) {
-		errorHandler(err);
-	}
-}
+require('dotenv').config();
+const axios = require('axios');
 
 module.exports = async (text, { to }) => {
-	return await translateText(text, to);
+	const response = await axios.post(
+		'https://api-free.deepl.com/v2/translate',
+		{
+			'text': [
+				text,
+			],
+			'target_lang': to,
+		},
+		{
+			headers: {
+				'Authorization': `DeepL-Auth-Key ${process.env.DEEPLAUTH}`,
+				'Content-Type': 'application/json',
+			},
+		},
+	);
+	return response;
 };
