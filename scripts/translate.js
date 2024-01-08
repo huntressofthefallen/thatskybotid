@@ -15,7 +15,7 @@ module.exports = async (text, { to }) => {
 		}
 	}
 
-	const translate = await translator.translateText(text, null, to, { formality: 'less', preserveFormatting: true });
+	const translate = await translator.translateText(text, null, to.toLowerCase() == 'en' ? 'en-US' : to, { formality: 'less', preserveFormatting: true });
 	const response = translate.text;
 
 	return response;
