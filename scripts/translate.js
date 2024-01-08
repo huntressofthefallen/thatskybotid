@@ -4,6 +4,7 @@ const deepl = require('deepl-node');
 module.exports = async (text, { to }) => {
 	let translator = new deepl.Translator(process.env.DEEPLAUTH_PRIMARY);
 	let usage = await translator.getUsage();
+	console.log(`DEEPL Usage (PRIMARY): ${usage.character.count}`);
 
 	if (usage.character.limitReached()) {
 		translator = new deepl.Translator(process.env.DEEPLAUTH_SECONDARY);
@@ -15,7 +16,7 @@ module.exports = async (text, { to }) => {
 		}
 	}
 
-	const translate = await translator.translateText(text, null, to.toLowerCase() == 'en' ? 'en-US' : to, { formality: 'less', preserveFormatting: true });
+	const translate = await translator.translateText(text, null, to.toLowerCase() == 'en' ? 'en-US' : to, { preserveFormatting: true });
 	const response = translate.text;
 
 	return response;
